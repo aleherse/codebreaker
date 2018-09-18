@@ -20,6 +20,23 @@ To test your implementation use this examples:
 
 | secret | guess | output |
 | ------ | ----- | ------ |
-| 1234 | 4256 | +- |
-| 3435 | 3445 | +++ |
-| 4342 | 1122 | +- |
+| 1234   | 4256  | +-     |
+| 3435   | 3445  | +++    |
+| 4342   | 1122  | +      |
+| 2314   | 3434  | +-     |
+
+## Development
+
+To create the developer environment run
+
+```bash
+cp .env .env.dist
+docker-compose build
+docker-compose up -d
+```
+
+To enter into the development container's shell run
+
+```bash
+docker-compose run app bash
+```

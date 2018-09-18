@@ -1,0 +1,38 @@
+version: '3.4'
+
+services:
+    app:
+        build: docker/php-fpm
+        volumes:
+        - .:/app
+        env_file:
+        - .env.dist
+        - .env
+        environment:
+        - DATABASE_HOST=db
+        - DATABASE_NAME=${DB_NAME}
+        - DATABASE_USER=${DB_USER}
+        - DATABASE_PASSWORD=${DB_PASSWORD}
+        - SYMFONY_SECRET=${SYMFONY_SECRET}
+        - XDEBUG_REMOTE_HOST=${XDEBUG_IP}
+        - XDEBUG_REMOTE_PORT=${XDEBUG_PORT}
+    server:
+        build: docker/nginx
+        ports:
+        - "80:80"
+        volumes:
+        - .:/app
+    db:
+        image: mysql:5.6
+        command: --default-authentication-plugin=mysql_native_password
+        restart: always
+        ports:
+        - "3306:3306"
+        env_file:
+        - .env.dist
+        - .env
+        environment:
+        - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+        - MYSQL_DATABASE=${DB_NAME}
+        - MYSQL_USER=${DB_USER}
+        - MYSQL_PASSWORD=${DB_PASSWORD}
