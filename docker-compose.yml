@@ -19,7 +19,7 @@ services:
     server:
         build: docker/nginx
         ports:
-        - "80:80"
+        - "8080:80"
         volumes:
         - .:/app
     db:
