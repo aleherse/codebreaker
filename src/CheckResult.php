@@ -13,16 +13,11 @@ class CheckResult
      * @var int
      */
     private $partial;
-    /**
-     * @var int
-     */
-    private $size;
 
-    public function __construct(int $exact, int $partial, int $size)
+    public function __construct(int $exact, int $partial)
     {
         $this->exact = $exact;
         $this->partial = $partial;
-        $this->size = $size;
     }
 
     public function exact(): int
@@ -33,10 +28,5 @@ class CheckResult
     public function partial(): int
     {
         return $this->partial;
-    }
-
-    public function hasBeenFound(): bool
-    {
-        return $this->size === $this->exact;
     }
 }

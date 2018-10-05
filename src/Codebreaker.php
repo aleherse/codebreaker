@@ -6,8 +6,6 @@ use PcComponentes\Codebreaker\View\ConsoleView;
 
 class Codebreaker
 {
-    const TRIES = 10;
-
     public function execute()
     {
         $view = new ConsoleView();
@@ -16,9 +14,7 @@ class Codebreaker
 
         $view->welcome();
 
-        $found = false;
-        $try = 0;
-        while (!$found && $try < self::TRIES) {
+        while ($checker->canPlay()) {
             $numbers = $view->readGuess();
             if (null === $numbers) {
                 exit(0);
@@ -33,14 +29,8 @@ class Codebreaker
 
             $checkResult = $checker->check($guess);
             $view->guessMatches($checkResult);
-
-            if ($checkResult->hasBeenFound()) {
-                $found = true;
-            }
-
-            $try++;
         }
 
-        $view->endOfGame($found, $try, $code);
+        $view->endOfGame($checker);
     }
 }

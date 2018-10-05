@@ -3,7 +3,7 @@
 namespace PcComponentes\Codebreaker\View;
 
 use PcComponentes\Codebreaker\CheckResult;
-use PcComponentes\Codebreaker\SecretCode;
+use PcComponentes\Codebreaker\GuessChecker;
 
 class ConsoleView
 {
@@ -19,7 +19,7 @@ class ConsoleView
 
         do {
             $response = trim(fgets(STDIN));
-            if (empty($response) && $this->doesReallyWantToExit()) {
+            if (empty($response) && $this->doYouReallyWantToExit()) {
                 return null;
             }
         } while (empty($response));
@@ -27,7 +27,7 @@ class ConsoleView
         return $response;
     }
 
-    private function doesReallyWantToExit(): bool
+    private function doYouReallyWantToExit(): bool
     {
         fwrite(STDOUT, "Are you sure you want to quit? (Y/n): ");
         $response = trim(fgets(STDIN));
@@ -47,12 +47,12 @@ class ConsoleView
         fwrite(STDOUT, str_repeat('-', $result->partial()) . "\n");
     }
 
-    public function endOfGame(bool $found, int $try, SecretCode $code): void
+    public function endOfGame(GuessChecker $checker): void
     {
-        if ($found) {
-            fwrite(STDOUT, sprintf("You broke the code (%s) in %s attempts\n", $code, $try));
+        if ($checker->hasBeenFound()) {
+            fwrite(STDOUT, sprintf("You broke the code (%s) in %s attempts\n", $checker->secretCode(), $checker->attempts()));
         } else {
-            fwrite(STDOUT, sprintf("You didn't break the code (%s)\n", $code));
+            fwrite(STDOUT, sprintf("You didn't break the code (%s)\n", $checker->secretCode()));
         }
     }
 }
