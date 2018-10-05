@@ -6,16 +6,24 @@ use PcComponentes\Codebreaker\View\ConsoleView;
 
 class Codebreaker
 {
-    public function execute()
+    /**
+     * @var ConsoleView
+     */
+    private $view;
+
+    public function __construct()
     {
-        $view = new ConsoleView();
-        $code = SecretCode::random();
+        $this->view = new ConsoleView();
+    }
+
+    public function execute(SecretCode $code)
+    {
         $checker = new GuessChecker($code);
 
-        $view->welcome();
+        $this->view->welcome();
 
         while ($checker->canPlay()) {
-            $numbers = $view->readGuess();
+            $numbers = $this->view->readGuess();
             if (null === $numbers) {
                 exit(0);
             }
@@ -23,14 +31,15 @@ class Codebreaker
             try {
                 $guess = new Guess($numbers);
             } catch(\InvalidArgumentException $e) {
-                $view->notAValidGuess();
+                $this->view->notAValidGuess();
                 continue;
             }
 
             $checkResult = $checker->check($guess);
-            $view->guessMatches($checkResult);
+
+            $this->view->guessMatches($checkResult);
         }
 
-        $view->endOfGame($checker);
+        $this->view->endOfGame($checker);
     }
 }
