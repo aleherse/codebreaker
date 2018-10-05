@@ -6,8 +6,6 @@ use PcComponentes\Codebreaker\View\ConsoleView;
 
 class Codebreaker
 {
-    const CODE_SIZE = 4;
-
     public function execute()
     {
         $view = new ConsoleView();
@@ -52,18 +50,13 @@ class Codebreaker
                 continue;
             }
 
-            $times = [1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0, 6 => 0];
-            foreach ($code as $value) {
-                $times[$value]++;
-            }
+            $guess = new Guess($numbers, $code);
+            $view->guessMatches(
+                $guess->exact(),
+                $guess->partial()
+            );
 
-            $guess = new Guess($numbers);
-            $exact = $guess->findExactMatches($code, $times);
-            $partial = $guess->findPartialMatches($times);
-
-            $view->guessMatches($exact, $partial);
-
-            if (4 === $exact) {
+            if (4 === $guess->exact()) {
                 $found = true;
             }
 
