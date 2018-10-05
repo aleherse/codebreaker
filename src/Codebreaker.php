@@ -9,13 +9,7 @@ class Codebreaker
     public function execute()
     {
         $view = new ConsoleView();
-
-        $code = [
-            (string)random_int(1, 6),
-            (string)random_int(1, 6),
-            (string)random_int(1, 6),
-            (string)random_int(1, 6)
-        ];
+        $code = SecretCode::random();
 
         $view->welcome();
 

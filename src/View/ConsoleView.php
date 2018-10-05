@@ -2,6 +2,8 @@
 
 namespace PcComponentes\Codebreaker\View;
 
+use PcComponentes\Codebreaker\SecretCode;
+
 class ConsoleView
 {
     public function welcome(): void
@@ -39,12 +41,12 @@ class ConsoleView
         fwrite(STDOUT, str_repeat('-', $partial) . "\n");
     }
 
-    public function endOfGame(bool $found, int $try, array $code): void
+    public function endOfGame(bool $found, int $try, SecretCode $code): void
     {
         if ($found) {
-            fwrite(STDOUT, sprintf("You broke the code (%s) in %s attempts\n", implode($code), $try));
+            fwrite(STDOUT, sprintf("You broke the code (%s) in %s attempts\n", $code, $try));
         } else {
-            fwrite(STDOUT, sprintf("You didn't break the code (%s)\n", implode($code)));
+            fwrite(STDOUT, sprintf("You didn't break the code (%s)\n", $code));
         }
     }
 }

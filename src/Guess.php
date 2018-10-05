@@ -26,7 +26,7 @@ class Guess
      */
     private $times;
 
-    public function __construct(array $numbers, array $code)
+    public function __construct(array $numbers, SecretCode $code)
     {
         $this->numbers = $numbers;
 
@@ -39,11 +39,11 @@ class Guess
         $this->partial = $this->findPartialMatches();
     }
 
-    private function findExactMatches(array $code): int
+    private function findExactMatches(SecretCode $code): int
     {
         $exact = 0;
         for ($j = 0; $j < self::CODE_SIZE; $j++) {
-            if ($code[$j] === $this->numbers[$j]) {
+            if ($code->in($j) === $this->numbers[$j]) {
                 $exact++;
                 $this->times[$this->numbers[$j]]--;
                 $guess[$j] = null;
