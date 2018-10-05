@@ -56,7 +56,7 @@ class Codebreaker
                 $guess->partial()
             );
 
-            if (4 === $guess->exact()) {
+            if ($guess->isFound()) {
                 $found = true;
             }
 
