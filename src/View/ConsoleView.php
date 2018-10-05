@@ -17,12 +17,17 @@ class ConsoleView
     {
         fwrite(STDOUT, "Make a Guess: ");
 
-        $response = trim(fgets(STDIN));
+        do {
+            $response = trim(fgets(STDIN));
+            if (empty($response) && $this->doesReallyWantToExit()) {
+                return null;
+            }
+        } while (empty($response));
 
-        return (!empty($response)) ? $response : null;
+        return $response;
     }
 
-    public function doesReallyWantToExit(): bool
+    private function doesReallyWantToExit(): bool
     {
         fwrite(STDOUT, "Are you sure you want to quit? (Y/n): ");
         $response = trim(fgets(STDIN));

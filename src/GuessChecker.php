@@ -24,10 +24,10 @@ class GuessChecker
         $this->code = $secretCode;
     }
 
-    public function check(array $numbers): CheckResult
+    public function check(Guess $guess): CheckResult
     {
         $this->times = $this->code->times();
-        $this->numbers = $numbers;
+        $this->numbers = $guess->numbers();
 
          return new CheckResult(
             $this->findExactMatches(),
@@ -40,7 +40,7 @@ class GuessChecker
     {
         $exact = 0;
         for ($j = 0; $j < $this->code->size(); $j++) {
-            if ($this->code->in($j) == $this->numbers[$j]) {
+            if ($this->code->in($j) === $this->numbers[$j]) {
                 $exact++;
                 $this->times[$this->numbers[$j]]--;
                 $this->numbers[$j] = null;

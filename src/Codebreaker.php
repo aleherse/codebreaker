@@ -21,33 +21,17 @@ class Codebreaker
         while (!$found && $try < self::TRIES) {
             $numbers = $view->readGuess();
             if (null === $numbers) {
-                if ($view->doesReallyWantToExit()) {
-                    exit(0);
-                } else {
-                    continue;
-                }
+                exit(0);
             }
 
-            $numbers = str_split($numbers, 1);
-            if (4 !== count($numbers)) {
+            try {
+                $guess = new Guess($numbers);
+            } catch(\InvalidArgumentException $e) {
                 $view->notAValidGuess();
                 continue;
             }
 
-            $error = false;
-            foreach ($numbers as $value) {
-                if (!is_numeric($value) || $value < 1 || $value > 6) {
-                    $view->notAValidGuess();
-                    $error = true;
-                    break;
-                }
-            }
-
-            if ($error) {
-                continue;
-            }
-
-            $checkResult = $checker->check($numbers);
+            $checkResult = $checker->check($guess);
             $view->guessMatches($checkResult);
 
             if ($checkResult->hasBeenFound()) {
