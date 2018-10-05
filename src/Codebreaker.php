@@ -24,8 +24,8 @@ class Codebreaker
         $found = false;
         $try = 0;
         while (!$found && $try < 10) {
-            $guess = $view->readGuess();
-            if (null === $guess) {
+            $numbers = $view->readGuess();
+            if (null === $numbers) {
                 if ($view->doesReallyWantToExit()) {
                     exit(0);
                 } else {
@@ -33,14 +33,14 @@ class Codebreaker
                 }
             }
 
-            $guess = str_split($guess, 1);
-            if (4 !== count($guess)) {
+            $numbers = str_split($numbers, 1);
+            if (4 !== count($numbers)) {
                 $view->notAValidGuess();
                 continue;
             }
 
             $error = false;
-            foreach ($guess as $value) {
+            foreach ($numbers as $value) {
                 if (!is_numeric($value) || $value < 1 || $value > 6) {
                     $view->notAValidGuess();
                     $error = true;
@@ -57,8 +57,9 @@ class Codebreaker
                 $times[$value]++;
             }
 
-            $exact = $this->findExactMatches($code, $guess, $times);
-            $partial = $this->findPartialMatches($guess, $times);
+            $guess = new Guess($numbers);
+            $exact = $guess->findExactMatches($code, $times);
+            $partial = $guess->findPartialMatches($times);
 
             $view->guessMatches($exact, $partial);
 
@@ -70,32 +71,5 @@ class Codebreaker
         }
 
         $view->endOfGame($found, $try, $code);
-    }
-
-    public function findPartialMatches(array $guess, array &$times): int
-    {
-        $partial = 0;
-        for ($j = 0; $j < 4; $j++) {
-            if (null !== $guess[$j] && $times[$guess[$j]] > 0) {
-                $partial++;
-                $times[$guess[$j]]--;
-            }
-        }
-
-        return $partial;
-    }
-
-    public function findExactMatches(array $code, array $guess, array &$times): int
-    {
-        $exact = 0;
-        for ($j = 0; $j < self::CODE_SIZE; $j++) {
-            if ($code[$j] === $guess[$j]) {
-                $exact++;
-                $times[$guess[$j]]--;
-                $guess[$j] = null;
-            }
-        }
-
-        return $exact;
     }
 }
