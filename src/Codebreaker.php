@@ -6,16 +6,19 @@ use PcComponentes\Codebreaker\View\ConsoleView;
 
 class Codebreaker
 {
+    const TRIES = 10;
+
     public function execute()
     {
         $view = new ConsoleView();
         $code = SecretCode::random();
+        $checker = new GuessChecker($code);
 
         $view->welcome();
 
         $found = false;
         $try = 0;
-        while (!$found && $try < 10) {
+        while (!$found && $try < self::TRIES) {
             $numbers = $view->readGuess();
             if (null === $numbers) {
                 if ($view->doesReallyWantToExit()) {
@@ -44,13 +47,10 @@ class Codebreaker
                 continue;
             }
 
-            $guess = new Guess($numbers, $code);
-            $view->guessMatches(
-                $guess->exact(),
-                $guess->partial()
-            );
+            $checkResult = $checker->check($numbers);
+            $view->guessMatches($checkResult);
 
-            if ($guess->isFound()) {
+            if ($checkResult->hasBeenFound()) {
                 $found = true;
             }
 

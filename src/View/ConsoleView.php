@@ -2,6 +2,7 @@
 
 namespace PcComponentes\Codebreaker\View;
 
+use PcComponentes\Codebreaker\CheckResult;
 use PcComponentes\Codebreaker\SecretCode;
 
 class ConsoleView
@@ -34,11 +35,11 @@ class ConsoleView
         fwrite(STDOUT, "A valid code has 4 digits and numbers from 1 to 6\n");
     }
 
-    public function guessMatches(int $exact, int $partial): void
+    public function guessMatches(CheckResult $result): void
     {
         fwrite(STDOUT, "Result: ");
-        fwrite(STDOUT, str_repeat('+', $exact));
-        fwrite(STDOUT, str_repeat('-', $partial) . "\n");
+        fwrite(STDOUT, str_repeat('+', $result->exact()));
+        fwrite(STDOUT, str_repeat('-', $result->partial()) . "\n");
     }
 
     public function endOfGame(bool $found, int $try, SecretCode $code): void
