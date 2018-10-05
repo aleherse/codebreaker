@@ -57,22 +57,8 @@ class Codebreaker
                 $times[$value]++;
             }
 
-            $exact = 0;
-            for ($j = 0; $j < self::CODE_SIZE; $j++) {
-                if ($code[$j] === $guess[$j]) {
-                    $exact++;
-                    $times[$guess[$j]]--;
-                    $guess[$j] = null;
-                }
-            }
-
-            $partial = 0;
-            for ($j = 0; $j < 4; $j++) {
-                if (null !== $guess[$j] && $times[$guess[$j]] > 0) {
-                    $partial++;
-                    $times[$guess[$j]]--;
-                }
-            }
+            $exact = $this->findExactMatches($code, $guess, $times);
+            $partial = $this->findPartialMatches($guess, $times);
 
             $view->guessMatches($exact, $partial);
 
@@ -84,5 +70,32 @@ class Codebreaker
         }
 
         $view->endOfGame($found, $try, $code);
+    }
+
+    public function findPartialMatches(array $guess, array &$times): int
+    {
+        $partial = 0;
+        for ($j = 0; $j < 4; $j++) {
+            if (null !== $guess[$j] && $times[$guess[$j]] > 0) {
+                $partial++;
+                $times[$guess[$j]]--;
+            }
+        }
+
+        return $partial;
+    }
+
+    public function findExactMatches(array $code, array $guess, array &$times): int
+    {
+        $exact = 0;
+        for ($j = 0; $j < self::CODE_SIZE; $j++) {
+            if ($code[$j] === $guess[$j]) {
+                $exact++;
+                $times[$guess[$j]]--;
+                $guess[$j] = null;
+            }
+        }
+
+        return $exact;
     }
 }
