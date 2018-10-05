@@ -24,12 +24,9 @@ class Codebreaker
         $found = false;
         $try = 0;
         while (!$found && $try < 10) {
-            $view->askForGuess();
-            $guess = trim(fgets(STDIN));
-            if (empty($guess)) {
-                $view->askForExitConfirmation();
-                $response = trim(fgets(STDIN));
-                if ('y' === strtolower($response) || empty($response)) {
+            $guess = $view->readGuess();
+            if (null === $guess) {
+                if ($view->doesReallyWantToExit()) {
                     exit(0);
                 } else {
                     continue;

@@ -10,14 +10,21 @@ class ConsoleView
         fwrite(STDOUT, "Enter an empty code to exit.\n\n");
     }
 
-    public function askForGuess(): void
+    public function readGuess(): ?string
     {
         fwrite(STDOUT, "Make a Guess: ");
+
+        $response = trim(fgets(STDIN));
+
+        return (!empty($response)) ? $response : null;
     }
 
-    public function askForExitConfirmation(): void
+    public function doesReallyWantToExit(): bool
     {
         fwrite(STDOUT, "Are you sure you want to quit? (Y/n): ");
+        $response = trim(fgets(STDIN));
+
+        return 'y' === strtolower($response) || empty($response);
     }
 
     public function notAValidGuess(): void
