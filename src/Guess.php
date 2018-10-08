@@ -38,4 +38,9 @@ class Guess
     {
         return $this->numbers;
     }
+
+    public function __toString()
+    {
+        return implode($this->numbers);
+    }
 }

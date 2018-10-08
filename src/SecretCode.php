@@ -36,14 +36,9 @@ class SecretCode
         return self::CODE_SIZE;
     }
 
-    public function occurrencesOfNumbers()
+    public function numbers(): array
     {
-        $times = [1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0, 6 => 0];
-        for ($i = 0; $i < $this->size(); $i++) {
-            $times[$this->numbers[$i]]++;
-        }
-
-        return $times;
+        return $this->numbers;
     }
 
     public function __toString(): string

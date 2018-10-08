@@ -4,6 +4,6 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
-$game = new PcComponentes\Codebreaker\Codebreaker();
+$game = new PcComponentes\Codebreaker\Game();
 
-$game->execute(PcComponentes\Codebreaker\SecretCode::random());
+$game->execute();

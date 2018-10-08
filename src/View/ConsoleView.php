@@ -2,8 +2,7 @@
 
 namespace PcComponentes\Codebreaker\View;
 
-use PcComponentes\Codebreaker\CheckResult;
-use PcComponentes\Codebreaker\GuessChecker;
+use PcComponentes\Codebreaker\Codebreaker;
 
 class ConsoleView
 {
@@ -40,19 +39,19 @@ class ConsoleView
         fwrite(STDOUT, "A valid code has 4 digits and numbers from 1 to 6\n");
     }
 
-    public function guessMatches(CheckResult $result): void
+    public function guessMatches(Codebreaker $codebreaker): void
     {
         fwrite(STDOUT, "Result: ");
-        fwrite(STDOUT, str_repeat('+', $result->exact()));
-        fwrite(STDOUT, str_repeat('-', $result->partial()) . "\n");
+        fwrite(STDOUT, str_repeat('+', $codebreaker->lastResult()->exact()));
+        fwrite(STDOUT, str_repeat('-', $codebreaker->lastResult()->partial()) . "\n");
     }
 
-    public function endOfGame(GuessChecker $checker): void
+    public function endOfGame(Codebreaker $codebreaker): void
     {
-        if ($checker->hasBeenFound()) {
-            fwrite(STDOUT, sprintf("You broke the code (%s) in %s attempts\n", $checker->secretCode(), $checker->attempts()));
+        if ($codebreaker->hasBeenFound()) {
+            fwrite(STDOUT, sprintf("You broke the code (%s) in %s attempts\n", $codebreaker->secretCode(), $codebreaker->attempts()));
         } else {
-            fwrite(STDOUT, sprintf("You didn't break the code (%s)\n", $checker->secretCode()));
+            fwrite(STDOUT, sprintf("You didn't break the code (%s)\n", $codebreaker->secretCode()));
         }
     }
 }

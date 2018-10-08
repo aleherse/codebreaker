@@ -2,44 +2,70 @@
 
 namespace PcComponentes\Codebreaker;
 
-use PcComponentes\Codebreaker\View\ConsoleView;
-
 class Codebreaker
 {
-    /**
-     * @var ConsoleView
-     */
-    private $view;
+    const TRIES = 10;
 
-    public function __construct()
+    /**
+     * @var SecretCode
+     */
+    private $code;
+
+    /**
+     * @var int
+     */
+    private $attempts = 0;
+
+    /**
+     * @var bool
+     */
+    private $found = false;
+
+    /**
+     * @var CheckResult
+     */
+    private $result;
+
+    public function __construct(SecretCode $secretCode)
     {
-        $this->view = new ConsoleView();
+        $this->code = $secretCode;
     }
 
-    public function execute(SecretCode $code)
+    public function secretCode(): SecretCode
     {
-        $checker = new GuessChecker($code);
+        return $this->code;
+    }
 
-        $this->view->welcome();
+    public function check(Guess $guess): void
+    {
+        $this->result = (new GuessChecker($this->code, $guess))->result();
 
-        while ($checker->canPlay()) {
-            $numbers = $this->view->readGuess();
-            if (null === $numbers) {
-                exit(0);
-            }
+        $this->found = $this->code->size() === $this->result->exact();
+        $this->attempts++;
+    }
 
-            try {
-                $guess = new Guess($numbers);
-            } catch(\InvalidArgumentException $e) {
-                $this->view->notAValidGuess();
-                continue;
-            }
+    public function lastResult(): CheckResult
+    {
+        return $this->result;
+    }
 
-            $checkResult = $checker->check($guess);
+    public function attempts(): int
+    {
+        return $this->attempts;
+    }
 
-            $this->view->guessMatches($checkResult);
-        }
+    public function hasMoreAttempts(): bool
+    {
+        return $this->attempts < self::TRIES;
+    }
 
-        $this->view->endOfGame($checker);
+    public function hasBeenFound(): bool
+    {
+        return $this->found;
+    }
+
+    public function canPlay(): bool
+    {
+        return !$this->hasBeenFound() && $this->hasMoreAttempts();
     }
 }

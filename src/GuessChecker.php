@@ -4,8 +4,6 @@ namespace PcComponentes\Codebreaker;
 
 class GuessChecker
 {
-    const TRIES = 10;
-
     /**
      * @var SecretCode
      */
@@ -14,7 +12,7 @@ class GuessChecker
     /**
      * @var int[]
      */
-    private $occurrencesOfNumbers;
+    private $occurrences;
 
     /**
      * @var int[]
@@ -22,37 +20,30 @@ class GuessChecker
     private $guessNumbers;
 
     /**
-     * @var int
+     * @var CheckResult
      */
-    private $attempts = 0;
+    private $result;
 
-    /**
-     * @var bool
-     */
-    private $found = false;
-
-    public function __construct(SecretCode $secretCode)
+    public function __construct(SecretCode $code, Guess $guess)
     {
-        $this->code = $secretCode;
-    }
-
-    public function secretCode(): SecretCode
-    {
-        return $this->code;
-    }
-
-    public function check(Guess $guess): CheckResult
-    {
-        $this->occurrencesOfNumbers = $this->code->occurrencesOfNumbers();
+        $this->code = $code;
+        $this->occurrences = $this->codeNumbersOccurrence($code);
         $this->guessNumbers = $guess->numbers();
 
-        $exact = $this->findExactMatches();
-        $partial = $this->findPartialMatches();
+        $this->result = new CheckResult(
+            $this->findExactMatches(),
+            $this->findPartialMatches()
+        );
+    }
 
-        $this->found = $this->code->size() === $exact;
-        $this->attempts++;
+    private function codeNumbersOccurrence(SecretCode $code)
+    {
+        $times = [1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0, 6 => 0];
+        for ($i = 0; $i < $code->size(); $i++) {
+            $times[$code->in($i)]++;
+        }
 
-        return new CheckResult($exact, $partial);
+        return $times;
     }
 
     private function findExactMatches(): int
@@ -61,7 +52,7 @@ class GuessChecker
         for ($j = 0; $j < $this->code->size(); $j++) {
             if ($this->code->in($j) === $this->guessNumbers[$j]) {
                 $exact++;
-                $this->occurrencesOfNumbers[$this->guessNumbers[$j]]--;
+                $this->occurrences[$this->guessNumbers[$j]]--;
                 $this->guessNumbers[$j] = null;
             }
         }
@@ -73,32 +64,17 @@ class GuessChecker
     {
         $partial = 0;
         for ($j = 0; $j < $this->code->size(); $j++) {
-            if (null !== $this->guessNumbers[$j] && $this->occurrencesOfNumbers[$this->guessNumbers[$j]] > 0) {
+            if (null !== $this->guessNumbers[$j] && $this->occurrences[$this->guessNumbers[$j]] > 0) {
                 $partial++;
-                $this->occurrencesOfNumbers[$this->guessNumbers[$j]]--;
+                $this->occurrences[$this->guessNumbers[$j]]--;
             }
         }
 
         return $partial;
     }
 
-    public function attempts(): int
+    public function result(): CheckResult
     {
-        return $this->attempts;
-    }
-
-    public function hasMoreAttempts(): bool
-    {
-        return $this->attempts < self::TRIES;
-    }
-
-    public function hasBeenFound(): bool
-    {
-        return $this->found;
-    }
-
-    public function canPlay(): bool
-    {
-        return !$this->hasBeenFound() && $this->hasMoreAttempts();
+        return $this->result;
     }
 }
