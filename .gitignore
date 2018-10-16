@@ -1,7 +1,11 @@
 .idea/
-.env
-
-/vendor/
 .php_cs.cache
 bin/*
 !bin/play
+
+###> symfony/framework-bundle ###
+/.env
+/public/bundles/
+/var/
+/vendor/
+###< symfony/framework-bundle ###

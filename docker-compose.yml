@@ -13,7 +13,7 @@ services:
         - DATABASE_NAME=${DB_NAME}
         - DATABASE_USER=${DB_USER}
         - DATABASE_PASSWORD=${DB_PASSWORD}
-        - SYMFONY_SECRET=${SYMFONY_SECRET}
+        - APP_SECRET=${APP_SECRET}
         - XDEBUG_REMOTE_HOST=${XDEBUG_IP}
         - XDEBUG_REMOTE_PORT=${XDEBUG_PORT}
     server:
