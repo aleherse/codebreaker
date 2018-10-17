@@ -5,13 +5,16 @@ namespace App\Command;
 use PcComponentes\Codebreaker\Games;
 use PcComponentes\Codebreaker\View\ConsoleView;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class CodebreakerPlayCommand extends Command
+class CodebreakerResumeCommand extends Command
 {
-    protected static $defaultName = 'codebreaker:play';
+    protected static $defaultName = 'codebreaker:resume';
+
     /**
      * @var Games
      */
@@ -25,11 +28,16 @@ class CodebreakerPlayCommand extends Command
 
     protected function configure()
     {
-        $this->setDescription('Play a game of codebreaker.');
+        $this->setDescription('Resume any of the unfinished games.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->game->play(new ConsoleView(new SymfonyStyle($input, $output)));
+        $view = new ConsoleView(new SymfonyStyle($input, $output));
+
+        $this->game->play(
+            $view,
+            $this->game->chooseGameToResume($view)
+        );
     }
 }

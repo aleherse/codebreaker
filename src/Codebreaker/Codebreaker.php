@@ -7,6 +7,11 @@ class Codebreaker
     const TRIES = 10;
 
     /**
+     * @var int
+     */
+    protected $id;
+
+    /**
      * @var Code
      */
     protected $secret;
@@ -29,6 +34,11 @@ class Codebreaker
     public function __construct(Code $secretCode)
     {
         $this->secret = $secretCode;
+    }
+
+    public function id(): int
+    {
+        return $this->id;
     }
 
     public function secretCode(): Code
@@ -67,5 +77,10 @@ class Codebreaker
     public function canPlay(): bool
     {
         return !$this->hasBeenFound() && $this->hasMoreAttempts();
+    }
+
+    public function __toString()
+    {
+        return sprintf("id: %s, attempts: %s, found: %s", $this->id, $this->attempts, $this->found ? 'yes' : 'no');
     }
 }

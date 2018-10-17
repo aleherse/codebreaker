@@ -24,10 +24,12 @@ class ConsoleView
         $this->io->text("Enter an empty code to exit.\n");
     }
 
-    public function readGuess(): ?string
+    public function readGuess(Codebreaker $codebreaker): ?string
     {
         do {
-            $response = $this->io->ask("Make a Guess");
+            $response = $this->io->ask(
+                sprintf("Make a Guess (%s/%s)", $codebreaker->attempts(), Codebreaker::TRIES)
+            );
             if (empty($response) && $this->doYouReallyWantToExit()) {
                 return null;
             }
@@ -68,5 +70,23 @@ class ConsoleView
         } else {
             $this->io->error(sprintf("You didn't break the code (%s)\n", $codebreaker->secretCode()));
         }
+    }
+
+    public function chooseGame(array $games): ?Codebreaker
+    {
+        $this->io->title("RESUME A GAME");
+
+        if (0 >= count($games)) {
+            return null;
+        }
+
+        $gameOptions = [];
+        $options = [];
+        foreach ($games as $game) {
+            $options[$game->id()] = (string) $game;
+            $gameOptions[(string) $game] = $game;
+        }
+
+        return $gameOptions[$this->io->choice("Select a game", $options, (string) $games[0])];
     }
 }

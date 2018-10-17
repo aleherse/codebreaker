@@ -8,14 +8,15 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20181017112017 extends AbstractMigration
+final class Version20181017133848 extends AbstractMigration
 {
     public function up(Schema $schema) : void
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('CREATE TABLE codebreaker (id INT AUTO_INCREMENT NOT NULL, secret VARCHAR(255) NOT NULL COMMENT \'(DC2Type:codebreaker_code)\', attempts INT NOT NULL, found TINYINT(1) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE codebreakers (id INT AUTO_INCREMENT NOT NULL, secret VARCHAR(255) NOT NULL COMMENT \'(DC2Type:codebreaker_code)\', attempts INT NOT NULL, found TINYINT(1) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
+        $this->addSql('DROP TABLE codebreaker');
     }
 
     public function down(Schema $schema) : void
@@ -23,6 +24,7 @@ final class Version20181017112017 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('DROP TABLE codebreaker');
+        $this->addSql('CREATE TABLE codebreaker (id INT AUTO_INCREMENT NOT NULL, secret VARCHAR(255) NOT NULL COLLATE utf8mb4_unicode_ci COMMENT \'(DC2Type:codebreaker_code)\', attempts INT NOT NULL, found TINYINT(1) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
+        $this->addSql('DROP TABLE codebreakers');
     }
 }

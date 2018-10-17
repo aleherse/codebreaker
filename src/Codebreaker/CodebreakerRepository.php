@@ -7,4 +7,6 @@ interface CodebreakerRepository
     public function new(): Codebreaker;
 
     public function save(Codebreaker $codebreaker);
+
+    public function continuableGames();
 }
