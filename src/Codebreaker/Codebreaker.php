@@ -9,17 +9,17 @@ class Codebreaker
     /**
      * @var Code
      */
-    private $secret;
+    protected $secret;
 
     /**
      * @var int
      */
-    private $attempts = 0;
+    protected $attempts = 0;
 
     /**
      * @var bool
      */
-    private $found = false;
+    protected $found = false;
 
     /**
      * @var CheckResult

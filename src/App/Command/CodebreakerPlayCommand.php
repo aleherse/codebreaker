@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use PcComponentes\Codebreaker\Game;
+use PcComponentes\Codebreaker\Games;
 use PcComponentes\Codebreaker\View\ConsoleView;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -13,11 +13,11 @@ class CodebreakerPlayCommand extends Command
 {
     protected static $defaultName = 'codebreaker:play';
     /**
-     * @var Game
+     * @var Games
      */
     private $game;
 
-    public function __construct(?string $name = null, Game $game)
+    public function __construct(?string $name = null, Games $game)
     {
         parent::__construct($name);
         $this->game = $game;
@@ -30,6 +30,6 @@ class CodebreakerPlayCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->game->execute(new ConsoleView(new SymfonyStyle($input, $output)));
+        $this->game->play(new ConsoleView(new SymfonyStyle($input, $output)));
     }
 }

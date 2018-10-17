@@ -4,12 +4,21 @@ namespace PcComponentes\Codebreaker;
 
 use PcComponentes\Codebreaker\View\ConsoleView;
 
-class Game
+class Games
 {
-    public function execute(ConsoleView $view)
+    /**
+     * @var CodebreakerRepository
+     */
+    private $codebreakers;
+
+    public function __construct(CodebreakerRepository $codebreakers)
     {
-        $code = Code::random();
-        $codebreaker = new Codebreaker($code);
+        $this->codebreakers = $codebreakers;
+    }
+
+    public function play(ConsoleView $view)
+    {
+        $codebreaker = $this->codebreakers->new();
 
         $view->welcome();
 
@@ -27,6 +36,8 @@ class Game
             }
 
             $codebreaker->check($guess);
+
+            $this->codebreakers->save($codebreaker);
 
             $view->guessMatches($codebreaker);
         }

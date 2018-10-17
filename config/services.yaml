@@ -31,3 +31,7 @@ services:
 
     PcComponentes\Codebreaker\:
         resource: '../src/Codebreaker/*'
+
+    PcComponentes\Codebreaker\CodebreakerRepository:
+        class: App\Repository\CodebreakerRepository
+        arguments: ["@doctrine"]
