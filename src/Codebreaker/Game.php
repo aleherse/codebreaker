@@ -8,7 +8,7 @@ class Game
 {
     public function execute(ConsoleView $view)
     {
-        $code = SecretCode::random();
+        $code = Code::random();
         $codebreaker = new Codebreaker($code);
 
         $view->welcome();
@@ -20,7 +20,7 @@ class Game
             }
 
             try {
-                $guess = new Guess($numbers);
+                $guess = Code::fromGuess($numbers);
             } catch (\InvalidArgumentException $e) {
                 $view->notAValidGuess();
                 continue;

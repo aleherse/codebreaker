@@ -5,7 +5,7 @@ namespace PcComponentes\Codebreaker;
 class GuessChecker
 {
     /**
-     * @var SecretCode
+     * @var Code
      */
     private $code;
 
@@ -24,10 +24,10 @@ class GuessChecker
      */
     private $result;
 
-    public function __construct(SecretCode $code, Guess $guess)
+    public function __construct(Code $secret, Code $guess)
     {
-        $this->code = $code;
-        $this->occurrences = $this->codeNumbersOccurrence($code);
+        $this->code = $secret;
+        $this->occurrences = $this->codeNumbersOccurrence($secret);
         $this->guessNumbers = $guess->numbers();
 
         $this->result = new CheckResult(
@@ -36,7 +36,7 @@ class GuessChecker
         );
     }
 
-    private function codeNumbersOccurrence(SecretCode $code)
+    private function codeNumbersOccurrence(Code $code)
     {
         $times = [1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0, 6 => 0];
         for ($i = 0; $i < $code->size(); $i++) {

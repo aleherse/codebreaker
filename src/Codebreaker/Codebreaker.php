@@ -7,9 +7,9 @@ class Codebreaker
     const TRIES = 10;
 
     /**
-     * @var SecretCode
+     * @var Code
      */
-    private $code;
+    private $secret;
 
     /**
      * @var int
@@ -26,21 +26,21 @@ class Codebreaker
      */
     private $result;
 
-    public function __construct(SecretCode $secretCode)
+    public function __construct(Code $secretCode)
     {
-        $this->code = $secretCode;
+        $this->secret = $secretCode;
     }
 
-    public function secretCode(): SecretCode
+    public function secretCode(): Code
     {
-        return $this->code;
+        return $this->secret;
     }
 
-    public function check(Guess $guess): void
+    public function check(Code $guess): void
     {
-        $this->result = (new GuessChecker($this->code, $guess))->result();
+        $this->result = (new GuessChecker($this->secret, $guess))->result();
 
-        $this->found = $this->code->size() === $this->result->exact();
+        $this->found = $this->secret->size() === $this->result->exact();
         $this->attempts++;
     }
 

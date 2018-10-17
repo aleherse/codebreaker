@@ -2,7 +2,7 @@
 
 namespace PcComponentes\Codebreaker;
 
-class SecretCode
+class Code
 {
     private const CODE_SIZE = 4;
 
@@ -10,6 +10,25 @@ class SecretCode
      * @var int
      */
     private $numbers;
+
+    public static function fromGuess(string $guess)
+    {
+        $values = str_split($guess, 1);
+        if (4 !== count($values)) {
+            throw new \InvalidArgumentException();
+        }
+
+        $numbers = [];
+        foreach ($values as $value) {
+            if (!is_numeric($value) || $value < 1 || $value > 6) {
+                throw new \InvalidArgumentException();
+            }
+
+            $numbers[] = (int) $value;
+        }
+
+        return new self($numbers);
+    }
 
     public static function random(): self
     {
