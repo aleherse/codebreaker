@@ -2,7 +2,7 @@
 
 namespace PcComponentes\Codebreaker;
 
-class CheckResult
+class AttemptedGuess
 {
     /**
      * @var int

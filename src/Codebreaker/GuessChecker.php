@@ -20,7 +20,7 @@ class GuessChecker
     private $guessNumbers;
 
     /**
-     * @var CheckResult
+     * @var AttemptedGuess
      */
     private $result;
 
@@ -30,7 +30,7 @@ class GuessChecker
         $this->occurrences = $this->codeNumbersOccurrence($secret);
         $this->guessNumbers = $guess->numbers();
 
-        $this->result = new CheckResult(
+        $this->result = new AttemptedGuess(
             $guess,
             $this->findExactMatches(),
             $this->findPartialMatches()
@@ -74,7 +74,7 @@ class GuessChecker
         return $partial;
     }
 
-    public function result(): CheckResult
+    public function result(): AttemptedGuess
     {
         return $this->result;
     }

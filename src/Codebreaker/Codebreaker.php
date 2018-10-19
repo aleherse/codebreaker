@@ -29,7 +29,7 @@ class Codebreaker
     protected $found = false;
 
     /**
-     * @var CheckResult[]|ArrayCollection
+     * @var AttemptedGuess[]|ArrayCollection
      */
     private $results;
 
@@ -59,7 +59,7 @@ class Codebreaker
         $this->results->add($result);
     }
 
-    public function lastResult(): CheckResult
+    public function lastResult(): AttemptedGuess
     {
         return $this->results->last();
     }
@@ -85,7 +85,7 @@ class Codebreaker
     }
 
     /**
-     * @return CheckResult[]|ArrayCollection
+     * @return AttemptedGuess[]|ArrayCollection
      */
     public function results(): ArrayCollection
     {
