@@ -14,10 +14,21 @@ class CheckResult
      */
     private $partial;
 
-    public function __construct(int $exact, int $partial)
+    /**
+     * @var Code
+     */
+    private $guess;
+
+    public function __construct(Code $guess, int $exact, int $partial)
     {
+        $this->guess = $guess;
         $this->exact = $exact;
         $this->partial = $partial;
+    }
+
+    public function guess(): Code
+    {
+        return $this->guess;
     }
 
     public function exact(): int

@@ -2,6 +2,8 @@
 
 namespace PcComponentes\Codebreaker;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 class Codebreaker
 {
     const TRIES = 10;
@@ -27,13 +29,14 @@ class Codebreaker
     protected $found = false;
 
     /**
-     * @var CheckResult
+     * @var CheckResult[]|ArrayCollection
      */
-    private $result;
+    private $results;
 
     public function __construct(Code $secretCode)
     {
         $this->secret = $secretCode;
+        $this->results = new ArrayCollection();
     }
 
     public function id(): int
@@ -48,15 +51,17 @@ class Codebreaker
 
     public function check(Code $guess): void
     {
-        $this->result = (new GuessChecker($this->secret, $guess))->result();
+        $result = (new GuessChecker($this->secret, $guess))->result();
 
-        $this->found = $this->secret->size() === $this->result->exact();
+        $this->found = $this->secret->size() === $result->exact();
         $this->attempts++;
+
+        $this->results->add($result);
     }
 
     public function lastResult(): CheckResult
     {
-        return $this->result;
+        return $this->results->last();
     }
 
     public function attempts(): int
@@ -77,6 +82,14 @@ class Codebreaker
     public function canPlay(): bool
     {
         return !$this->hasBeenFound() && $this->hasMoreAttempts();
+    }
+
+    /**
+     * @return CheckResult[]|ArrayCollection
+     */
+    public function results(): ArrayCollection
+    {
+        return $this->results;
     }
 
     public function __toString()

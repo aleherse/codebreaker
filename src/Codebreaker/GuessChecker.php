@@ -31,6 +31,7 @@ class GuessChecker
         $this->guessNumbers = $guess->numbers();
 
         $this->result = new CheckResult(
+            $guess,
             $this->findExactMatches(),
             $this->findPartialMatches()
         );
