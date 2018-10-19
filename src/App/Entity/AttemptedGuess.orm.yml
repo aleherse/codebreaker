@@ -1,0 +1,23 @@
+PcComponentes\Codebreaker\AttemptedGuess:
+  type: entity
+  table: attempted_guess
+  id:
+    id:
+      type: integer
+      generator:
+        strategy: AUTO
+  fields:
+    guess:
+      type: codebreaker_code
+    exact:
+      type: integer
+    partial:
+      type: integer
+  manyToOne:
+    codebreaker:
+      targetEntity: Codebreaker
+      joinColumn:
+        name: codebreaker_id
+        referencedColumnName: id
+
+  lifecycleCallbacks: {  }

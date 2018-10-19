@@ -11,32 +11,32 @@ class Codebreaker
     /**
      * @var int
      */
-    protected $id;
+    private $id;
 
     /**
      * @var Code
      */
-    protected $secret;
+    private $secret;
 
     /**
      * @var int
      */
-    protected $attempts = 0;
+    private $attempts = 0;
 
     /**
      * @var bool
      */
-    protected $found = false;
+    private $found = false;
 
     /**
      * @var AttemptedGuess[]|ArrayCollection
      */
-    private $results;
+    private $attemptedGuesses;
 
     public function __construct(Code $secretCode)
     {
         $this->secret = $secretCode;
-        $this->results = new ArrayCollection();
+        $this->attemptedGuesses = new ArrayCollection();
     }
 
     public function id(): int
@@ -51,17 +51,17 @@ class Codebreaker
 
     public function check(Code $guess): void
     {
-        $result = (new GuessChecker($this->secret, $guess))->result();
+        $result = (new GuessChecker($this, $guess))->result();
 
         $this->found = $this->secret->size() === $result->exact();
         $this->attempts++;
 
-        $this->results->add($result);
+        $this->attemptedGuesses->add($result);
     }
 
     public function lastResult(): AttemptedGuess
     {
-        return $this->results->last();
+        return $this->attemptedGuesses->last();
     }
 
     public function attempts(): int
@@ -87,9 +87,9 @@ class Codebreaker
     /**
      * @return AttemptedGuess[]|ArrayCollection
      */
-    public function results(): ArrayCollection
+    public function attemptedGuesses(): ArrayCollection
     {
-        return $this->results;
+        return $this->attemptedGuesses;
     }
 
     public function __toString()

@@ -24,13 +24,14 @@ class GuessChecker
      */
     private $result;
 
-    public function __construct(Code $secret, Code $guess)
+    public function __construct(Codebreaker $codebreaker, Code $guess)
     {
-        $this->code = $secret;
-        $this->occurrences = $this->codeNumbersOccurrence($secret);
+        $this->code = $codebreaker->secretCode();
+        $this->occurrences = $this->codeNumbersOccurrence($this->code);
         $this->guessNumbers = $guess->numbers();
 
         $this->result = new AttemptedGuess(
+            $codebreaker,
             $guess,
             $this->findExactMatches(),
             $this->findPartialMatches()

@@ -7,6 +7,11 @@ class AttemptedGuess
     /**
      * @var int
      */
+    private $id;
+
+    /**
+     * @var int
+     */
     private $exact;
 
     /**
@@ -19,11 +24,22 @@ class AttemptedGuess
      */
     private $guess;
 
-    public function __construct(Code $guess, int $exact, int $partial)
+    /**
+     * @var Codebreaker
+     */
+    private $codebreaker;
+
+    public function __construct(Codebreaker $codebreaker, Code $guess, int $exact, int $partial)
     {
         $this->guess = $guess;
         $this->exact = $exact;
         $this->partial = $partial;
+        $this->codebreaker = $codebreaker;
+    }
+
+    public function id(): int
+    {
+        return $this->id;
     }
 
     public function guess(): Code

@@ -14,5 +14,10 @@ PcComponentes\Codebreaker\Codebreaker:
       type: integer
     found:
       type: boolean
+  oneToMany:
+    attemptedGuesses:
+      targetEntity: AttemptedGuess
+      mappedBy: codebreaker
+      cascade: ["persist", "merge"]
 
   lifecycleCallbacks: {  }
