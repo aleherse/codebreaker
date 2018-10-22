@@ -33,11 +33,6 @@ class CodebreakerResumeCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $view = new ConsoleView(new SymfonyStyle($input, $output));
-
-        $this->game->play(
-            $view,
-            $this->game->chooseGameToResume($view)
-        );
+        $this->game->resume(new ConsoleView(new SymfonyStyle($input, $output)));
     }
 }

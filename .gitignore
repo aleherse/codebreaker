@@ -1,7 +1,7 @@
 .idea/
 .php_cs.cache
 bin/*
-!bin/play
+!bin/console
 
 ###> symfony/framework-bundle ###
 /.env

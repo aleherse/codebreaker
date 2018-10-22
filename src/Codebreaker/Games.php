@@ -16,7 +16,28 @@ class Games
         $this->codebreakers = $codebreakers;
     }
 
-    public function play(ConsoleView $view, Codebreaker $codebreaker = null)
+
+    public function resume(ConsoleView $view)
+    {
+        $game = $view->chooseGame(
+            $this->codebreakers->continuableGames()
+        );
+
+        if (null !== $game) {
+            $this->playGame($game, $view);
+        }
+    }
+
+
+    public function play(ConsoleView $view)
+    {
+        $this->playGame(
+            $this->codebreakers->new(),
+            $view
+        );
+    }
+
+    private function playGame(Codebreaker $codebreaker, ConsoleView $view)
     {
         if (null === $codebreaker) {
             $codebreaker = $this->codebreakers->new();
@@ -45,12 +66,5 @@ class Games
         }
 
         $view->endOfGame($codebreaker);
-    }
-
-    public function chooseGameToResume(ConsoleView $view): Codebreaker
-    {
-        $games = $this->codebreakers->continuableGames();
-
-        return $view->chooseGame($games);
     }
 }
