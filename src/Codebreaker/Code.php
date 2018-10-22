@@ -5,6 +5,8 @@ namespace PcComponentes\Codebreaker;
 class Code
 {
     private const CODE_SIZE = 4;
+    private const MIN_VALUE = 1;
+    private const MAX_VALUE = 6;
 
     /**
      * @var int
@@ -14,13 +16,13 @@ class Code
     public static function fromGuess(string $guess)
     {
         $values = str_split($guess, 1);
-        if (4 !== count($values)) {
+        if (self::CODE_SIZE !== count($values)) {
             throw new \InvalidArgumentException();
         }
 
         $numbers = [];
         foreach ($values as $value) {
-            if (!is_numeric($value) || $value < 1 || $value > 6) {
+            if (!is_numeric($value) || $value < self::MIN_VALUE || $value > self::MAX_VALUE) {
                 throw new \InvalidArgumentException();
             }
 
@@ -33,10 +35,10 @@ class Code
     public static function random(): self
     {
         return new self([
-            random_int(1, 6),
-            random_int(1, 6),
-            random_int(1, 6),
-            random_int(1, 6)
+            random_int(self::MIN_VALUE, self::MAX_VALUE),
+            random_int(self::MIN_VALUE, self::MAX_VALUE),
+            random_int(self::MIN_VALUE, self::MAX_VALUE),
+            random_int(self::MIN_VALUE, self::MAX_VALUE),
         ]);
     }
 

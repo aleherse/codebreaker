@@ -12,6 +12,10 @@ class CodeType extends StringType
 
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
+        if (empty($value)) {
+            return null;
+        }
+
         return Code::fromGuess(parent::convertToPHPValue($value, $platform));
     }
 

@@ -3,6 +3,7 @@
 namespace PcComponentes\Codebreaker;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 class Codebreaker
 {
@@ -29,7 +30,7 @@ class Codebreaker
     private $found = false;
 
     /**
-     * @var AttemptedGuess[]|ArrayCollection
+     * @var AttemptedGuess[]|Collection
      */
     private $attemptedGuesses;
 
@@ -85,9 +86,9 @@ class Codebreaker
     }
 
     /**
-     * @return AttemptedGuess[]|ArrayCollection
+     * @return AttemptedGuess[]|Collection
      */
-    public function attemptedGuesses(): ArrayCollection
+    public function attemptedGuesses(): Collection
     {
         return $this->attemptedGuesses;
     }

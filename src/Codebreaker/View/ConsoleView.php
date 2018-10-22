@@ -2,6 +2,7 @@
 
 namespace PcComponentes\Codebreaker\View;
 
+use PcComponentes\Codebreaker\AttemptedGuess;
 use PcComponentes\Codebreaker\Codebreaker;
 use Symfony\Component\Console\Style\OutputStyle;
 
@@ -17,18 +18,35 @@ class ConsoleView
         $this->io = $io;
     }
 
-    public function welcome(): void
+    public function welcome(Codebreaker $codebreaker): void
     {
         $this->io->title("WELCOME TO CODEBREAKER");
         $this->io->text("You need to figure out a code of 4 numbers that range from 1 to 6");
         $this->io->text("Enter an empty code to exit.\n");
+
+        $this->showPreviousAttempts($codebreaker);
+    }
+
+    private function showPreviousAttempts(Codebreaker $codebreaker)
+    {
+        $previousAttempts = [];
+        foreach ($codebreaker->attemptedGuesses() as $attempt) {
+            $previousAttempts[] = [
+                (string) $attempt->guess(),
+                $this->matches($attempt)
+            ];
+        }
+
+        if (!empty($previousAttempts)) {
+            $this->io->table(['Guesses', 'Matches'], $previousAttempts);
+        }
     }
 
     public function readGuess(Codebreaker $codebreaker): ?string
     {
         do {
             $response = $this->io->ask(
-                sprintf("Make a Guess (%s/%s)", $codebreaker->attempts(), Codebreaker::TRIES)
+                sprintf("Make a Guess (%s/%s)", $codebreaker->attempts() + 1, Codebreaker::TRIES)
             );
             if (empty($response) && $this->doYouReallyWantToExit()) {
                 return null;
@@ -50,11 +68,16 @@ class ConsoleView
 
     public function guessMatches(Codebreaker $codebreaker): void
     {
-        $this->io->text(sprintf(
-            "Result: %s%s",
-            str_repeat('+', $codebreaker->lastResult()->exact()),
-            str_repeat('-', $codebreaker->lastResult()->partial())
-        ));
+        $this->io->text(sprintf("Result: %s", $this->matches($codebreaker->lastResult())));
+    }
+
+    private function matches(AttemptedGuess $attempt)
+    {
+        return sprintf(
+            "%s%s",
+            str_repeat('+', $attempt->exact()),
+            str_repeat('-', $attempt->partial())
+        );
     }
 
     public function endOfGame(Codebreaker $codebreaker): void
@@ -62,10 +85,10 @@ class ConsoleView
         if ($codebreaker->hasBeenFound()) {
             $this->io->success(
                 sprintf(
-                "You broke the code (%s) in %s attempts\n",
-                $codebreaker->secretCode(),
-                $codebreaker->attempts()
-            )
+                    "You broke the code (%s) in %s attempts\n",
+                    $codebreaker->secretCode(),
+                    $codebreaker->attempts()
+                )
             );
         } else {
             $this->io->error(sprintf("You didn't break the code (%s)\n", $codebreaker->secretCode()));
@@ -83,10 +106,10 @@ class ConsoleView
         $gameOptions = [];
         $options = [];
         foreach ($games as $game) {
-            $options[$game->id()] = (string) $game;
-            $gameOptions[(string) $game] = $game;
+            $options[$game->id()] = (string)$game;
+            $gameOptions[(string)$game] = $game;
         }
 
-        return $gameOptions[$this->io->choice("Select a game", $options, (string) $games[0])];
+        return $gameOptions[$this->io->choice("Select a game", $options, (string)$games[0])];
     }
 }

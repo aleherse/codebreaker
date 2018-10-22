@@ -26,8 +26,8 @@ class DoctrineCodebreakerRepository extends ServiceEntityRepository implements C
 
     public function save(Codebreaker $codebreaker)
     {
-        $this->_em->persist($codebreaker);
-        $this->_em->flush();
+        $this->getEntityManager()->persist($codebreaker);
+        $this->getEntityManager()->flush();
     }
 
     /**
@@ -36,6 +36,8 @@ class DoctrineCodebreakerRepository extends ServiceEntityRepository implements C
     public function continuableGames(): array
     {
         return $this->createQueryBuilder('c')
+            ->select('c, a')
+            ->leftJoin('c.attemptedGuesses', 'a')
             ->andWhere('c.attempts < :tries AND c.found = FALSE')
             ->setParameter('tries', Codebreaker::TRIES)
             ->getQuery()

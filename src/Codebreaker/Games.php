@@ -43,7 +43,7 @@ class Games
             $codebreaker = $this->codebreakers->new();
         }
 
-        $view->welcome();
+        $view->welcome($codebreaker);
 
         while ($codebreaker->canPlay()) {
             $numbers = $view->readGuess($codebreaker);
