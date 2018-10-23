@@ -42,6 +42,14 @@ class Games
         $view->showStats($stats);
     }
 
+    public function playedGames(ConsoleView $view)
+    {
+        // @TODO: Add pagination
+        $games = $this->codebreakers->finishedGames(1);
+
+        $view->showPlayedGames($games);
+    }
+
     private function playGame(Codebreaker $codebreaker, ConsoleView $view)
     {
         if (null === $codebreaker) {

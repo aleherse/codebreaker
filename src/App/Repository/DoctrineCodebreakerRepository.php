@@ -3,6 +3,9 @@
 namespace App\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Knp\Component\Pager\Pagination\AbstractPagination;
+use Knp\Component\Pager\Pagination\PaginationInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use PcComponentes\Codebreaker\Code;
 use PcComponentes\Codebreaker\Codebreaker;
 use PcComponentes\Codebreaker\CodebreakerRepository;
@@ -11,9 +14,17 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class DoctrineCodebreakerRepository extends ServiceEntityRepository implements CodebreakerRepository
 {
-    public function __construct(RegistryInterface $registry)
+    private const PAGE_SIZE = 2;
+
+    /**
+     * @var PaginatorInterface
+     */
+    private $paginator;
+
+    public function __construct(RegistryInterface $registry, PaginatorInterface $paginator)
     {
         parent::__construct($registry, Codebreaker::class);
+        $this->paginator = $paginator;
     }
 
     public function new(): Codebreaker
@@ -43,6 +54,20 @@ class DoctrineCodebreakerRepository extends ServiceEntityRepository implements C
             ->setParameter('tries', Codebreaker::TRIES)
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * @return Codebreaker[]|AbstractPagination
+     */
+    public function finishedGames(int $page = 1): PaginationInterface
+    {
+        return $this->paginator->paginate(
+            $this->createQueryBuilder('c')
+                ->andWhere('c.attempts = :tries OR c.found = TRUE')
+                ->setParameter('tries', Codebreaker::TRIES),
+            $page,
+            self::PAGE_SIZE
+        );
     }
 
     public function stats(): GameStats

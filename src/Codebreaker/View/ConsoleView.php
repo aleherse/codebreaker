@@ -2,9 +2,11 @@
 
 namespace PcComponentes\Codebreaker\View;
 
+use Knp\Component\Pager\Pagination\AbstractPagination;
 use PcComponentes\Codebreaker\AttemptedGuess;
 use PcComponentes\Codebreaker\Codebreaker;
 use PcComponentes\Codebreaker\GameStats;
+use Symfony\Component\Console\Helper\TableCell;
 use Symfony\Component\Console\Style\OutputStyle;
 
 class ConsoleView
@@ -138,5 +140,15 @@ class ConsoleView
                 ]
             ]
         );
+    }
+
+    public function showPlayedGames(AbstractPagination $games)
+    {
+        // @TODO: Make a nice table
+
+        $this->io->table([
+            array_map(function (Codebreaker $codebreaker) { return new TableCell('Game ' . $codebreaker->id(), ['colspan' => 2]); }, $games->getItems()),
+            ['Guess', 'Match']
+        ], [['a']]);
     }
 }

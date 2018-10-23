@@ -10,5 +10,7 @@ interface CodebreakerRepository
 
     public function continuableGames();
 
+    public function finishedGames(int $page = 1);
+
     public function stats(): GameStats;
 }
