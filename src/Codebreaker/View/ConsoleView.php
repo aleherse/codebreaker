@@ -4,6 +4,7 @@ namespace PcComponentes\Codebreaker\View;
 
 use PcComponentes\Codebreaker\AttemptedGuess;
 use PcComponentes\Codebreaker\Codebreaker;
+use PcComponentes\Codebreaker\GameStats;
 use Symfony\Component\Console\Style\OutputStyle;
 
 class ConsoleView
@@ -106,10 +107,36 @@ class ConsoleView
         $gameOptions = [];
         $options = [];
         foreach ($games as $game) {
-            $options[$game->id()] = (string)$game;
-            $gameOptions[(string)$game] = $game;
+            $options[$game->id()] = (string) $game;
+            $gameOptions[(string) $game] = $game;
         }
 
-        return $gameOptions[$this->io->choice("Select a game", $options, (string)$games[0])];
+        return $gameOptions[$this->io->choice("Select a game", $options, (string) $games[0])];
+    }
+
+    public function showStats(GameStats $stats)
+    {
+        $this->io->table(
+            [
+            'average',
+            'minimum',
+            'win',
+            'lost',
+            'played',
+            'not finished',
+            'total'
+        ],
+            [
+                [
+                    $stats->average(),
+                    $stats->minimum(),
+                    $stats->win(),
+                    $stats->lost(),
+                    $stats->played(),
+                    $stats->notFinished(),
+                    $stats->total()
+                ]
+            ]
+        );
     }
 }

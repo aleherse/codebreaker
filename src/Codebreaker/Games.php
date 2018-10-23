@@ -16,7 +16,6 @@ class Games
         $this->codebreakers = $codebreakers;
     }
 
-
     public function resume(ConsoleView $view)
     {
         $game = $view->chooseGame(
@@ -28,13 +27,19 @@ class Games
         }
     }
 
-
     public function play(ConsoleView $view)
     {
         $this->playGame(
             $this->codebreakers->new(),
             $view
         );
+    }
+
+    public function showStats(ConsoleView $view)
+    {
+        $stats = $this->codebreakers->stats();
+
+        $view->showStats($stats);
     }
 
     private function playGame(Codebreaker $codebreaker, ConsoleView $view)

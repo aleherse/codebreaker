@@ -9,4 +9,6 @@ interface CodebreakerRepository
     public function save(Codebreaker $codebreaker);
 
     public function continuableGames();
+
+    public function stats(): GameStats;
 }

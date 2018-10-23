@@ -11,20 +11,9 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class CodebreakerResumeCommand extends Command
+class CodebreakerResumeCommand extends CodebreakerBaseCommand
 {
     protected static $defaultName = 'codebreaker:resume';
-
-    /**
-     * @var Games
-     */
-    private $game;
-
-    public function __construct(Games $game)
-    {
-        parent::__construct(null);
-        $this->game = $game;
-    }
 
     protected function configure()
     {
