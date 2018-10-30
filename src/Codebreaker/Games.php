@@ -2,7 +2,7 @@
 
 namespace PcComponentes\Codebreaker;
 
-use PcComponentes\Codebreaker\View\ConsoleView;
+use PcComponentes\Codebreaker\View\View;
 
 class Games
 {
@@ -16,7 +16,7 @@ class Games
         $this->codebreakers = $codebreakers;
     }
 
-    public function resume(ConsoleView $view)
+    public function resume(View $view)
     {
         $game = $view->chooseGame(
             $this->codebreakers->continuableGames()
@@ -27,7 +27,7 @@ class Games
         }
     }
 
-    public function play(ConsoleView $view)
+    public function play(View $view)
     {
         $this->playGame(
             $this->codebreakers->new(),
@@ -35,14 +35,14 @@ class Games
         );
     }
 
-    public function showStats(ConsoleView $view)
+    public function showStats(View $view)
     {
         $stats = $this->codebreakers->stats();
 
         $view->showStats($stats);
     }
 
-    public function playedGames(ConsoleView $view)
+    public function playedGames(View $view)
     {
         // @TODO: Add pagination
         $games = $this->codebreakers->finishedGames(1);
@@ -50,7 +50,7 @@ class Games
         $view->showPlayedGames($games);
     }
 
-    private function playGame(Codebreaker $codebreaker, ConsoleView $view)
+    private function playGame(Codebreaker $codebreaker, View $view)
     {
         if (null === $codebreaker) {
             $codebreaker = $this->codebreakers->new();

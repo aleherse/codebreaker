@@ -1,15 +1,16 @@
 <?php
 
-namespace PcComponentes\Codebreaker\View;
+namespace App\View;
 
 use Knp\Component\Pager\Pagination\AbstractPagination;
 use PcComponentes\Codebreaker\AttemptedGuess;
 use PcComponentes\Codebreaker\Codebreaker;
 use PcComponentes\Codebreaker\GameStats;
+use PcComponentes\Codebreaker\View\View;
 use Symfony\Component\Console\Helper\TableCell;
 use Symfony\Component\Console\Style\OutputStyle;
 
-class ConsoleView
+class ConsoleView implements View
 {
     /**
      * @var OutputStyle
