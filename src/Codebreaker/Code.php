@@ -1,6 +1,6 @@
 <?php
 
-namespace PcComponentes\Codebreaker;
+namespace App\Codebreaker;
 
 class Code
 {

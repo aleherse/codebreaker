@@ -27,8 +27,7 @@
     },
     "autoload": {
         "psr-4": {
-            "PcComponentes\\Codebreaker\\": "src/Codebreaker",
-            "App\\": "src/App"
+            "App\\": "src"
         }
     },
     "autoload-dev": {

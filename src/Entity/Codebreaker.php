@@ -1,36 +1,46 @@
 <?php
 
-namespace PcComponentes\Codebreaker;
+namespace App\Entity;
 
+use App\Codebreaker\Code;
+use App\Codebreaker\GuessChecker;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * @ORM\Entity(repositoryClass="App\Repository\CodebreakerRepository")
+ */
 class Codebreaker
 {
     const TRIES = 10;
 
     /**
-     * @var int
+     * @ORM\Id()
+     * @ORM\GeneratedValue()
+     * @ORM\Column(type="integer")
      */
     private $id;
 
     /**
      * @var Code
+     * @ORM\Column(type="codebreaker_code")
      */
     private $secret;
 
     /**
-     * @var int
+     * @ORM\Column(type="integer")
      */
     private $attempts = 0;
 
     /**
-     * @var bool
+     * @ORM\Column(type="boolean")
      */
     private $found = false;
 
     /**
      * @var AttemptedGuess[]|Collection
+     * @ORM\OneToMany(targetEntity="App\Entity\AttemptedGuess", mappedBy="codebreaker", cascade={"persist", "merge"})
      */
     private $attemptedGuesses;
 

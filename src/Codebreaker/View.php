@@ -1,10 +1,9 @@
 <?php
 
-namespace PcComponentes\Codebreaker\View;
+namespace App\Codebreaker;
 
+use App\Entity\Codebreaker;
 use Knp\Component\Pager\Pagination\AbstractPagination;
-use PcComponentes\Codebreaker\Codebreaker;
-use PcComponentes\Codebreaker\GameStats;
 
 interface View
 {

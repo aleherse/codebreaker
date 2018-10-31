@@ -2,22 +2,22 @@
 
 namespace App\Command;
 
-use App\View\ConsoleView;
+use App\Codebreaker\View\ConsoleView;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class CodebreakerGamesCommand extends CodebreakerBaseCommand
+class CodebreakerPlayCommand extends CodebreakerBaseCommand
 {
-    protected static $defaultName = 'codebreaker:games';
+    protected static $defaultName = 'codebreaker:play';
 
     protected function configure()
     {
-        $this->setDescription('Shows the games played');
+        $this->setDescription('Play a game of codebreaker.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->game->playedGames(new ConsoleView(new SymfonyStyle($input, $output)));
+        $this->game->play(new ConsoleView(new SymfonyStyle($input, $output)));
     }
 }

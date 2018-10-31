@@ -1,31 +1,39 @@
 <?php
 
-namespace PcComponentes\Codebreaker;
+namespace App\Entity;
 
+use App\Codebreaker\Code;
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity()
+ */
 class AttemptedGuess
 {
     /**
-     * @var int
+     * @ORM\Id()
+     * @ORM\GeneratedValue()
+     * @ORM\Column(type="integer")
      */
     private $id;
 
     /**
-     * @var int
+     * @ORM\Column(type="integer")
      */
     private $exact;
 
     /**
-     * @var int
+     * @ORM\Column(type="integer")
      */
     private $partial;
 
     /**
-     * @var Code
+     * @ORM\Column(type="codebreaker_code")
      */
     private $guess;
 
     /**
-     * @var Codebreaker
+     * @ORM\ManyToOne(targetEntity="App\Entity\Codebreaker", inversedBy="id")
      */
     private $codebreaker;
 

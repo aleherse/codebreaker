@@ -1,8 +1,9 @@
 <?php
 
-namespace PcComponentes\Codebreaker;
+namespace App\Codebreaker;
 
-use PcComponentes\Codebreaker\View\View;
+use App\Entity\Codebreaker;
+use App\Repository\CodebreakerRepository;
 
 class Games
 {

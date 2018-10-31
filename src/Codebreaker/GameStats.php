@@ -1,6 +1,6 @@
 <?php
 
-namespace PcComponentes\Codebreaker;
+namespace App\Codebreaker;
 
 class GameStats
 {
@@ -40,21 +40,21 @@ class GameStats
     private $total;
 
     public function __construct(
-        int $average,
-        int $minimum,
-        int $win,
-        int $lost,
-        int $played,
-        int $notFinished,
-        int $total
+        int $average = null,
+        int $minimum = null,
+        int $win = null,
+        int $lost = null,
+        int $played = null,
+        int $notFinished = null,
+        int $total = null
     ) {
-        $this->average = $average;
-        $this->minimum = $minimum;
-        $this->win = $win;
-        $this->lost = $lost;
-        $this->played = $played;
-        $this->notFinished = $notFinished;
-        $this->total = $total;
+        $this->average = $average ?? 0;
+        $this->minimum = $minimum ?? 0;
+        $this->win = $win ?? 0;
+        $this->lost = $lost ?? 0;
+        $this->played = $played ?? 0;
+        $this->notFinished = $notFinished ?? 0;
+        $this->total = $total ?? 0;
     }
 
     public function average(): int

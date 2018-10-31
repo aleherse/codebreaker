@@ -1,12 +1,12 @@
 <?php
 
-namespace App\View;
+namespace App\Codebreaker\View;
 
+use App\Codebreaker\GameStats;
+use App\Codebreaker\View;
+use App\Entity\AttemptedGuess;
+use App\Entity\Codebreaker;
 use Knp\Component\Pager\Pagination\AbstractPagination;
-use PcComponentes\Codebreaker\AttemptedGuess;
-use PcComponentes\Codebreaker\Codebreaker;
-use PcComponentes\Codebreaker\GameStats;
-use PcComponentes\Codebreaker\View\View;
 use Symfony\Component\Console\Helper\TableCell;
 use Symfony\Component\Console\Style\OutputStyle;
 

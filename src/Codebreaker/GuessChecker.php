@@ -1,6 +1,9 @@
 <?php
 
-namespace PcComponentes\Codebreaker;
+namespace App\Codebreaker;
+
+use App\Entity\AttemptedGuess;
+use App\Entity\Codebreaker;
 
 class GuessChecker
 {

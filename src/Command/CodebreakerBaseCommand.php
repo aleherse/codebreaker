@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use PcComponentes\Codebreaker\Games;
+use App\Codebreaker\Games;
 use Symfony\Component\Console\Command\Command;
 
 abstract class CodebreakerBaseCommand extends Command

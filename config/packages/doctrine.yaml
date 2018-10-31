@@ -26,9 +26,9 @@ doctrine:
         naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
         mappings:
-            Codebreaker:
+            App:
                 is_bundle: false
-                type: yml
-                dir: '%kernel.project_dir%/src/App/Entity'
-                prefix: 'PcComponentes\Codebreaker'
-                alias: Codebreaker
+                type: annotation
+                dir: '%kernel.project_dir%/src/Entity'
+                prefix: 'App\Entity'
+                alias: App

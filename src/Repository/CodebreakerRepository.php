@@ -2,17 +2,16 @@
 
 namespace App\Repository;
 
+use App\Codebreaker\Code;
+use App\Codebreaker\GameStats;
+use App\Entity\Codebreaker;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Knp\Component\Pager\Pagination\AbstractPagination;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
-use PcComponentes\Codebreaker\Code;
-use PcComponentes\Codebreaker\Codebreaker;
-use PcComponentes\Codebreaker\CodebreakerRepository;
-use PcComponentes\Codebreaker\GameStats;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
-class DoctrineCodebreakerRepository extends ServiceEntityRepository implements CodebreakerRepository
+class CodebreakerRepository extends ServiceEntityRepository
 {
     private const PAGE_SIZE = 2;
 
@@ -80,12 +79,12 @@ class DoctrineCodebreakerRepository extends ServiceEntityRepository implements C
             ->getSingleResult();
 
         $lost = $this->getEntityManager()
-            ->createQuery('SELECT COUNT(c) FROM PcComponentes\Codebreaker\Codebreaker AS c WHERE c.found = false AND c.attempts = :tries')
+            ->createQuery('SELECT COUNT(c) FROM App\Entity\Codebreaker AS c WHERE c.found = false AND c.attempts = :tries')
             ->setParameter(':tries', Codebreaker::TRIES)
             ->getSingleScalarResult();
 
         $total = $this->getEntityManager()
-            ->createQuery('SELECT COUNT(c) FROM PcComponentes\Codebreaker\Codebreaker AS c')
+            ->createQuery('SELECT COUNT(c) FROM App\Entity\Codebreaker AS c')
             ->getSingleScalarResult();
 
         return new GameStats(

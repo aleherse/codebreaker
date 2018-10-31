@@ -2,9 +2,9 @@
 
 namespace App\Type;
 
+use App\Codebreaker\Code;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\StringType;
-use PcComponentes\Codebreaker\Code;
 
 class CodeType extends StringType
 {
