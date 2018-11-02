@@ -7,11 +7,16 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "knplabs/knp-paginator-bundle": "^2.8",
+        "sensio/framework-extra-bundle": "^5.2",
+        "symfony/asset": "*",
         "symfony/console": "*",
+        "symfony/debug-pack": "^1.0",
         "symfony/flex": "^1.1",
         "symfony/framework-bundle": "*",
         "symfony/orm-pack": "^1.0",
         "symfony/security-bundle": "*",
+        "symfony/translation": "*",
+        "symfony/twig-bundle": "*",
         "symfony/yaml": "*"
     },
     "require-dev": {
@@ -27,7 +32,7 @@
         },
         "sort-packages": true
     },
-    "autoload": {
+    "autoload": {   
         "psr-4": {
             "App\\": "src"
         }
