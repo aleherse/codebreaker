@@ -19,4 +19,12 @@ class PublicController extends AbstractController
 
         return $this->render('public/homepage.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     }
+
+    /**
+     * @Route("/logout", name="app_logout")
+     */
+    public function logout(): Response
+    {
+        return new Response('');
+    }
 }
