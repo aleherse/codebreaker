@@ -152,4 +152,35 @@ class ConsoleView implements View
             ['Guess', 'Match']
         ], [['a']]);
     }
+
+    public function askForUsername(): string
+    {
+        return $this->io->ask('Enter your username', null, function ($value) {
+            if (trim($value) == '') {
+                throw new \Exception('The username cannot be empty');
+            }
+
+            return $value;
+        });
+    }
+
+    public function askForPassword(): string
+    {
+        return $this->io->askHidden('Enter your password', function ($value) {
+            if (trim($value) == '') {
+                throw new \Exception('The password cannot be empty');
+            }
+
+            return $value;
+        });
+    }
+
+    public function showLoginResult(bool $success)
+    {
+        if ($success) {
+            $this->io->success('Logged successfully.');
+        } else {
+            $this->io->error('Unable to login, please try again.');
+        }
+    }
 }

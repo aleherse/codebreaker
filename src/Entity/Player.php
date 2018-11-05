@@ -34,6 +34,12 @@ class Player implements UserInterface
      */
     private $password;
 
+    /**
+     * @var string The user session
+     * @ORM\Column(type="string", length=50, unique=true, nullable=true)
+     */
+    private $session;
+
     public function __construct()
     {
         $this->games = new ArrayCollection();
@@ -110,5 +116,17 @@ class Player implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function generateNewSession(): string
+    {
+        $this->session = rtrim(strtr(base64_encode(random_bytes(32)), '+/', '-_'), '=');
+
+        return $this->session;
+    }
+
+    public function getSession(): string
+    {
+        return $this->session;
     }
 }
