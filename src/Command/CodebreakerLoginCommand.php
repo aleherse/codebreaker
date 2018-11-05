@@ -33,11 +33,11 @@ class CodebreakerLoginCommand extends Command
     {
         $view = new ConsoleView(new SymfonyStyle($input, $output));
 
-        $success = $this->authentication->login(
+        $player = $this->authentication->player(
             $view->askForUsername(),
             $view->askForPassword()
         );
 
-        $view->showLoginResult($success);
+        $view->showLoginResult(null === $player ? false : true);
     }
 }

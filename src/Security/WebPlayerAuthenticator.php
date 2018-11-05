@@ -2,8 +2,8 @@
 
 namespace App\Security;
 
-use App\Entity\Player;
-use Doctrine\ORM\EntityManagerInterface;
+
+use App\Repository\PlayerRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
@@ -23,21 +23,30 @@ class WebPlayerAuthenticator extends AbstractFormLoginAuthenticator
 {
     use TargetPathTrait;
 
-    private $entityManager;
+    /**
+     * @var RouterInterface
+     */
     private $router;
+
+    /**
+     * @var CsrfTokenManagerInterface
+     */
     private $csrfTokenManager;
-    private $passwordEncoder;
+
+    /**
+     * @var Authentication
+     */
+    private $authentication;
 
     public function __construct(
-        EntityManagerInterface $entityManager,
         RouterInterface $router,
         CsrfTokenManagerInterface $csrfTokenManager,
-        UserPasswordEncoderInterface $passwordEncoder
+        UserPasswordEncoderInterface $passwordEncoder,
+        PlayerRepository $players
     ) {
-        $this->entityManager = $entityManager;
         $this->router = $router;
         $this->csrfTokenManager = $csrfTokenManager;
-        $this->passwordEncoder = $passwordEncoder;
+        $this->authentication = new Authentication($players, $passwordEncoder);
     }
 
     public function supports(Request $request)
@@ -53,6 +62,7 @@ class WebPlayerAuthenticator extends AbstractFormLoginAuthenticator
             'password' => $request->request->get('_password'),
             'csrf_token' => $request->request->get('_csrf_token'),
         ];
+
         $request->getSession()->set(
             Security::LAST_USERNAME,
             $credentials['username']
@@ -68,7 +78,7 @@ class WebPlayerAuthenticator extends AbstractFormLoginAuthenticator
             throw new InvalidCsrfTokenException();
         }
 
-        $user = $this->entityManager->getRepository(Player::class)->findOneBy(['username' => $credentials['username']]);
+        $user = $this->authentication->player($credentials['username'], $credentials['password']);
 
         if (!$user) {
             throw new CustomUserMessageAuthenticationException('Username could not be found.');
@@ -79,7 +89,8 @@ class WebPlayerAuthenticator extends AbstractFormLoginAuthenticator
 
     public function checkCredentials($credentials, UserInterface $user)
     {
-        return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
+        // This step is done in the authentication service
+        return true;
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)

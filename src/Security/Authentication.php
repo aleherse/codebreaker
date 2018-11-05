@@ -29,29 +29,35 @@ class Authentication
     public function __construct(
         PlayerRepository $players,
         UserPasswordEncoderInterface $encoder,
-        CacheInterface $cache
+        CacheInterface $cache = null
     ) {
         $this->players = $players;
         $this->encoder = $encoder;
         $this->cache = $cache;
     }
 
-    public function login(string $username, string $password): bool
+    public function player(string $username, string $password): ?Player
     {
         $player = $this->players->findOneBy(['username' => $username]);
 
         if (null === $player || !$this->encoder->isPasswordValid($player, $password)) {
-            return false;
+            return null;
         }
 
-        $this->cache->set(self::CACHE_KEY, $player->generateNewSession(), self::CACHE_EXPIRATION_TIME);
-        $this->players->save($player);
+        if (null !== $this->cache) {
+            $this->cache->set(self::CACHE_KEY, $player->generateNewSession(), self::CACHE_EXPIRATION_TIME);
+            $this->players->save($player);
+        }
 
-        return true;
+        return $player;
     }
 
     public function currentPlayer(): ?Player
     {
+        if (null === $this->cache) {
+            return null;
+        }
+
         $session = $this->cache->get(self::CACHE_KEY);
         if (null === $session) {
             return null;
@@ -68,6 +74,8 @@ class Authentication
 
     public function logout()
     {
-        $this->cache->delete(self::CACHE_KEY);
+        if (null !== $this->cache) {
+            $this->cache->delete(self::CACHE_KEY);
+        }
     }
 }
