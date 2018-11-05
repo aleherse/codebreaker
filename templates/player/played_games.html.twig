@@ -3,5 +3,46 @@
 {% block title %}My played games{% endblock %}
 
 {% block body %}
-    <a href="{{ path('app_logout') }}">Logout</a>
+    <div class="row">
+        <h1>{{ app.user.username|title }}, these are the games you have played!</h1>
+    </div>
+    {% if games|length > 0 %}
+        <div class="row">
+            {% for game in games %}
+                <div class="col-sm">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col" colspan="3">GAME {{ game.id }}</th>
+                        </tr>
+                        <tr>
+                            <th scope="col">Attempt</th>
+                            <th scope="col">Guess</th>
+                            <th scope="col">Matches</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for attempt in game.attemptedGuesses %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ attempt.guess }}</td>
+                                <td>{{ attempt|codebreaker_matches }}</td>
+                            </tr>
+                        {% endfor %}
+                        <tr>
+                            <td>Code</td>
+                            <td>{{ game.secretCode }}</td>
+                            <td></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="row">
+            {{ knp_pagination_render(games) }}
+        </div>
+    {% else %}
+        <h3>No games found.</h3>
+    {% endif %}
 {% endblock %}

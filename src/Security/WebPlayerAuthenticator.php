@@ -42,7 +42,7 @@ class WebPlayerAuthenticator extends AbstractFormLoginAuthenticator
 
     public function supports(Request $request)
     {
-        return 'app_homepage' === $request->attributes->get('_route')
+        return 'app_login' === $request->attributes->get('_route')
             && $request->isMethod('POST');
     }
 
@@ -93,6 +93,6 @@ class WebPlayerAuthenticator extends AbstractFormLoginAuthenticator
 
     protected function getLoginUrl()
     {
-        return $this->router->generate('app_homepage');
+        return $this->router->generate('app_login');
     }
 }

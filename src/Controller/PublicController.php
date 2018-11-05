@@ -12,12 +12,20 @@ class PublicController extends AbstractController
     /**
      * @Route("/", name="app_homepage")
      */
-    public function index(AuthenticationUtils $authenticationUtils): Response
+    public function index(): Response
+    {
+        return $this->render('public/homepage.html.twig', []);
+    }
+
+    /**
+     * @Route("/login", name="app_login")
+     */
+    public function login(AuthenticationUtils $authenticationUtils): Response
     {
         $error = $authenticationUtils->getLastAuthenticationError();
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        return $this->render('public/homepage.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
+        return $this->render('public/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     }
 
     /**
