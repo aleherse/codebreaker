@@ -14,7 +14,7 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class CodebreakerRepository extends ServiceEntityRepository
 {
-    private const PAGE_SIZE = 2;
+    private const PAGE_SIZE = 4;
 
     /**
      * @var PaginatorInterface

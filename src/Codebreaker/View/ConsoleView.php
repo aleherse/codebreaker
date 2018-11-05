@@ -8,6 +8,7 @@ use App\Entity\AttemptedGuess;
 use App\Entity\Codebreaker;
 use Knp\Component\Pager\Pagination\AbstractPagination;
 use Symfony\Component\Console\Helper\TableCell;
+use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Style\OutputStyle;
 
 class ConsoleView implements View
@@ -25,7 +26,7 @@ class ConsoleView implements View
     public function welcome(Codebreaker $codebreaker): void
     {
         $this->io->title("WELCOME TO CODEBREAKER");
-   
+
         if (null !== $player = $codebreaker->player()) {
             $this->io->section("You are currently logged as {$codebreaker->player()}.");
         } else {
@@ -42,7 +43,7 @@ class ConsoleView implements View
         $previousAttempts = [];
         foreach ($codebreaker->attemptedGuesses() as $attempt) {
             $previousAttempts[] = [
-                (string) $attempt->guess(),
+                (string)$attempt->guess(),
                 $this->matches($attempt)
             ];
         }
@@ -116,25 +117,25 @@ class ConsoleView implements View
         $gameOptions = [];
         $options = [];
         foreach ($games as $game) {
-            $options[$game->id()] = (string) $game;
-            $gameOptions[(string) $game] = $game;
+            $options[$game->id()] = (string)$game;
+            $gameOptions[(string)$game] = $game;
         }
 
-        return $gameOptions[$this->io->choice("Select a game", $options, (string) $games[0])];
+        return $gameOptions[$this->io->choice("Select a game", $options, (string)$games[0])];
     }
 
     public function showStats(GameStats $stats)
     {
         $this->io->table(
             [
-            'average',
-            'minimum',
-            'win',
-            'lost',
-            'played',
-            'not finished',
-            'total'
-        ],
+                'average',
+                'minimum',
+                'win',
+                'lost',
+                'played',
+                'not finished',
+                'total'
+            ],
             [
                 [
                     $stats->average(),
@@ -151,12 +152,36 @@ class ConsoleView implements View
 
     public function showPlayedGames(AbstractPagination $games)
     {
-        // @TODO: Make a nice table
+        $header = [];
+        $subHeader = [];
+        $content = [];
+        /** @var Codebreaker $codebreaker */
+        foreach ($games->getItems() as $codebreaker) {
+            $header[] = new TableCell('Game ' . $codebreaker->id(), ['colspan' => 3]);
+            $subHeader[] = 'Attempt';
+            $subHeader[] = 'Guess';
+            $subHeader[] = 'Matches';
+            for ($j = 0; $j < Codebreaker::TRIES; $j++) {
+                /** @var AttemptedGuess $attempt */
+                $attempt = $codebreaker->attemptedGuesses()->get($j);
 
-        $this->io->table([
-            array_map(function (Codebreaker $codebreaker) { return new TableCell('Game ' . $codebreaker->id(), ['colspan' => 2]); }, $games->getItems()),
-            ['Guess', 'Match']
-        ], [['a']]);
+                $content[$j][] = $j + 1;
+                if (null !== $attempt) {
+                    $content[$j][] = (string) $attempt->guess();
+                    $content[$j][] = $this->matches($attempt);
+                } else {
+                    $content[$j][] = '-';
+                    $content[$j][] = '';
+                }
+            }
+
+            $content[$j++] = new TableSeparator();
+            $content[$j][] = 'Code';
+            $content[$j][] = (string) $codebreaker->secretCode();
+            $content[$j][] = '-';
+        }
+
+        $this->io->table([$header, $subHeader], $content);
     }
 
     public function askForUsername(): string
