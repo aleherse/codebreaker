@@ -189,4 +189,9 @@ class ConsoleView implements View
             $this->io->error('Unable to login, please try again.');
         }
     }
+
+    public function showLogout()
+    {
+        $this->io->success('You have been logged out.');
+    }
 }

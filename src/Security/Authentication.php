@@ -63,4 +63,9 @@ class Authentication
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    public function logout()
+    {
+        $this->cache->delete(self::CACHE_KEY);
+    }
 }
