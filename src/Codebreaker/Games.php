@@ -27,7 +27,7 @@ class Games
     public function resume(View $view)
     {
         if (null === $player = $this->auth->currentPlayer()) {
-            $view->resumeAnonymous();
+            $view->anonymousForbidden();
             return;
         }
 
@@ -57,8 +57,13 @@ class Games
 
     public function playedGames(View $view)
     {
+        if (null === $player = $this->auth->currentPlayer()) {
+            $view->anonymousForbidden();
+            return;
+        }
+
         // @TODO: Add pagination
-        $games = $this->codebreakers->finishedGames(1);
+        $games = $this->codebreakers->finishedGames($player, 1);
 
         $view->showPlayedGames($games);
     }

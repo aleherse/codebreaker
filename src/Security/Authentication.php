@@ -57,6 +57,8 @@ class Authentication
             return null;
         }
 
+        $this->cache->set(self::CACHE_KEY, $session, self::CACHE_EXPIRATION_TIME);
+
         return $this->players->createQueryBuilder('p')
             ->where('p.session = :session')
             ->setParameter('session', $session)

@@ -29,5 +29,5 @@ interface View
 
     public function showLoginResult(bool $success);
 
-    public function resumeAnonymous();
+    public function anonymousForbidden();
 }

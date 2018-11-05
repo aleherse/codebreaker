@@ -62,12 +62,14 @@ class CodebreakerRepository extends ServiceEntityRepository
     /**
      * @return Codebreaker[]|AbstractPagination
      */
-    public function finishedGames(int $page = 1): PaginationInterface
+    public function finishedGames(Player $player, int $page = 1): PaginationInterface
     {
         return $this->paginator->paginate(
             $this->createQueryBuilder('c')
                 ->andWhere('c.attempts = :tries OR c.found = TRUE')
-                ->setParameter('tries', Codebreaker::TRIES),
+                ->andWhere('c.player = :player')
+                ->setParameter('tries', Codebreaker::TRIES)
+                ->setParameter('player', $player),
             $page,
             self::PAGE_SIZE
         );

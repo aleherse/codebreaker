@@ -220,8 +220,8 @@ class ConsoleView implements View
         $this->io->success('You have been logged out.');
     }
 
-    public function resumeAnonymous()
+    public function anonymousForbidden()
     {
-        $this->io->error('Only logged players can resume games');
+        $this->io->error('Only logged players can do this');
     }
 }
