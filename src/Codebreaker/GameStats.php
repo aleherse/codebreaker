@@ -38,6 +38,10 @@ class GameStats
      * @var int
      */
     private $total;
+    /**
+     * @var int
+     */
+    private $players;
 
     public function __construct(
         int $average = null,
@@ -46,7 +50,8 @@ class GameStats
         int $lost = null,
         int $played = null,
         int $notFinished = null,
-        int $total = null
+        int $total = null,
+        int $players = null
     ) {
         $this->average = $average ?? 0;
         $this->minimum = $minimum ?? 0;
@@ -55,6 +60,7 @@ class GameStats
         $this->played = $played ?? 0;
         $this->notFinished = $notFinished ?? 0;
         $this->total = $total ?? 0;
+        $this->players = $players ?? 0;
     }
 
     public function average(): int
@@ -90,5 +96,10 @@ class GameStats
     public function total(): int
     {
         return $this->total;
+    }
+
+    public function players(): int
+    {
+        return $this->players;
     }
 }

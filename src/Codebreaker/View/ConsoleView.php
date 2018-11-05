@@ -134,7 +134,8 @@ class ConsoleView implements View
                 'lost',
                 'played',
                 'not finished',
-                'total'
+                'total',
+                'players'
             ],
             [
                 [
@@ -144,7 +145,8 @@ class ConsoleView implements View
                     $stats->lost(),
                     $stats->played(),
                     $stats->notFinished(),
-                    $stats->total()
+                    $stats->total(),
+                    $stats->players()
                 ]
             ]
         );

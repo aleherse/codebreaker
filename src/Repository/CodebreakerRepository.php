@@ -93,6 +93,10 @@ class CodebreakerRepository extends ServiceEntityRepository
             ->createQuery('SELECT COUNT(c) FROM App\Entity\Codebreaker AS c')
             ->getSingleScalarResult();
 
+        $players = $this->getEntityManager()
+            ->createQuery('SELECT count(p) FROM App\Entity\Player as p')
+            ->getSingleScalarResult();
+
         return new GameStats(
             $stats['average'],
             $stats['minimum'],
@@ -100,7 +104,8 @@ class CodebreakerRepository extends ServiceEntityRepository
             $lost,
             $stats['played'],
             $total - $stats['played'],
-            $total
+            $total,
+            $players
         );
     }
 }
