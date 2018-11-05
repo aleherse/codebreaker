@@ -33,7 +33,7 @@ class AttemptedGuess
     private $guess;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Codebreaker", inversedBy="id")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Codebreaker", inversedBy="attemptedGuesses")
      */
     private $codebreaker;
 

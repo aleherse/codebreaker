@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\CodebreakerRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -12,9 +13,11 @@ class PublicController extends AbstractController
     /**
      * @Route("/", name="app_homepage")
      */
-    public function index(): Response
+    public function index(CodebreakerRepository $codebreakers): Response
     {
-        return $this->render('public/homepage.html.twig', []);
+        $stats = $codebreakers->stats();
+
+        return $this->render('public/homepage.html.twig', ['stats' => $stats]);
     }
 
     /**
