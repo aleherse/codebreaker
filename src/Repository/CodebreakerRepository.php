@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Codebreaker\Code;
 use App\Codebreaker\GameStats;
 use App\Entity\Codebreaker;
+use App\Entity\Player;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Knp\Component\Pager\Pagination\AbstractPagination;
 use Knp\Component\Pager\Pagination\PaginationInterface;
@@ -26,9 +27,9 @@ class CodebreakerRepository extends ServiceEntityRepository
         $this->paginator = $paginator;
     }
 
-    public function new(): Codebreaker
+    public function new(Player $player = null): Codebreaker
     {
-        $codebreaker = new Codebreaker(Code::random());
+        $codebreaker = new Codebreaker(Code::random(), $player);
 
         $this->save($codebreaker);
 
@@ -37,8 +38,10 @@ class CodebreakerRepository extends ServiceEntityRepository
 
     public function save(Codebreaker $codebreaker)
     {
-        $this->getEntityManager()->persist($codebreaker);
-        $this->getEntityManager()->flush();
+        if (null !== $codebreaker->player()) {
+            $this->getEntityManager()->persist($codebreaker);
+            $this->getEntityManager()->flush();
+        }
     }
 
     /**

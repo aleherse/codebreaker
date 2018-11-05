@@ -4,6 +4,7 @@ namespace App\Codebreaker;
 
 use App\Entity\Codebreaker;
 use App\Repository\CodebreakerRepository;
+use App\Security\Authentication;
 
 class Games
 {
@@ -12,9 +13,15 @@ class Games
      */
     private $codebreakers;
 
-    public function __construct(CodebreakerRepository $codebreakers)
+    /**
+     * @var Authentication
+     */
+    private $auth;
+
+    public function __construct(CodebreakerRepository $codebreakers, Authentication $auth)
     {
         $this->codebreakers = $codebreakers;
+        $this->auth = $auth;
     }
 
     public function resume(View $view)
@@ -31,7 +38,7 @@ class Games
     public function play(View $view)
     {
         $this->playGame(
-            $this->codebreakers->new(),
+            $this->codebreakers->new($this->auth->currentPlayer()),
             $view
         );
     }
@@ -53,10 +60,6 @@ class Games
 
     private function playGame(Codebreaker $codebreaker, View $view)
     {
-        if (null === $codebreaker) {
-            $codebreaker = $this->codebreakers->new();
-        }
-
         $view->welcome($codebreaker);
 
         while ($codebreaker->canPlay()) {

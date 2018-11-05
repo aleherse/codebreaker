@@ -2,6 +2,7 @@
 
 namespace App\Security;
 
+use App\Entity\Player;
 use App\Repository\PlayerRepository;
 use Psr\SimpleCache\CacheInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -9,6 +10,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class Authentication
 {
     private const CACHE_EXPIRATION_TIME = 1800;
+    private const CACHE_KEY = 'user_session';
 
     /**
      * @var PlayerRepository
@@ -42,9 +44,23 @@ class Authentication
             return false;
         }
 
-        $this->cache->set('user_session', $player->generateNewSession(), self::CACHE_EXPIRATION_TIME);
+        $this->cache->set(self::CACHE_KEY, $player->generateNewSession(), self::CACHE_EXPIRATION_TIME);
         $this->players->save($player);
 
         return true;
+    }
+
+    public function currentPlayer(): ?Player
+    {
+        $session = $this->cache->get(self::CACHE_KEY);
+        if (null === $session) {
+            return null;
+        }
+
+        return $this->players->createQueryBuilder('p')
+            ->where('p.session = :session')
+            ->setParameter('session', $session)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 }

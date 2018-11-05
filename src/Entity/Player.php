@@ -20,6 +20,7 @@ class Player implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @var string
      */
     private $username;
 
@@ -128,5 +129,10 @@ class Player implements UserInterface
     public function getSession(): string
     {
         return $this->session;
+    }
+
+    public function __toString()
+    {
+        return $this->username;
     }
 }

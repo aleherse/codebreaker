@@ -25,6 +25,12 @@ class ConsoleView implements View
     public function welcome(Codebreaker $codebreaker): void
     {
         $this->io->title("WELCOME TO CODEBREAKER");
+   
+        if (null !== $player = $codebreaker->player()) {
+            $this->io->section("You are currently logged as {$codebreaker->player()}.");
+        } else {
+            $this->io->section("You are logged as an anonymous player, your games won't be saved!");
+        }
         $this->io->text("You need to figure out a code of 4 numbers that range from 1 to 6");
         $this->io->text("Enter an empty code to exit.\n");
 

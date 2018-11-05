@@ -44,9 +44,16 @@ class Codebreaker
      */
     private $attemptedGuesses;
 
-    public function __construct(Code $secretCode)
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Player")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $player;
+
+    public function __construct(Code $secretCode, Player $player = null)
     {
         $this->secret = $secretCode;
+        $this->player = $player;
         $this->attemptedGuesses = new ArrayCollection();
     }
 
@@ -106,5 +113,10 @@ class Codebreaker
     public function __toString()
     {
         return sprintf("id: %s, attempts: %s, found: %s", $this->id, $this->attempts, $this->found ? 'yes' : 'no');
+    }
+
+    public function player(): ?Player
+    {
+        return $this->player;
     }
 }
