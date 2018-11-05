@@ -47,13 +47,14 @@ class CodebreakerRepository extends ServiceEntityRepository
     /**
      * @return Codebreaker[]
      */
-    public function continuableGames(): array
+    public function continuableGames(Player $player): array
     {
         return $this->createQueryBuilder('c')
             ->select('c, a')
             ->leftJoin('c.attemptedGuesses', 'a')
-            ->andWhere('c.attempts < :tries AND c.found = FALSE')
+            ->andWhere('c.attempts < :tries AND c.found = FALSE AND c.player = :player')
             ->setParameter('tries', Codebreaker::TRIES)
+            ->setParameter('player', $player)
             ->getQuery()
             ->getResult();
     }

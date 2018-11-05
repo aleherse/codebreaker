@@ -194,4 +194,9 @@ class ConsoleView implements View
     {
         $this->io->success('You have been logged out.');
     }
+
+    public function resumeAnonymous()
+    {
+        $this->io->error('Only logged players can resume games');
+    }
 }

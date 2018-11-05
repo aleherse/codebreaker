@@ -26,8 +26,13 @@ class Games
 
     public function resume(View $view)
     {
+        if (null === $player = $this->auth->currentPlayer()) {
+            $view->resumeAnonymous();
+            return;
+        }
+
         $game = $view->chooseGame(
-            $this->codebreakers->continuableGames()
+            $this->codebreakers->continuableGames($player)
         );
 
         if (null !== $game) {

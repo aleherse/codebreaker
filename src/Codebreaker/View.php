@@ -22,4 +22,12 @@ interface View
     public function showStats(GameStats $stats);
 
     public function showPlayedGames(AbstractPagination $games);
+
+    public function askForUsername(): string;
+
+    public function askForPassword(): string;
+
+    public function showLoginResult(bool $success);
+
+    public function resumeAnonymous();
 }
