@@ -12,11 +12,12 @@
 </head>
 <body>
 <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
-    <h5 class="my-0 mr-md-auto font-weight-normal">Codebreaker</h5>
+    <h5 class="my-0 mr-md-auto font-weight-normal"><a class="p-2 text-dark" href="{{ path('app_homepage') }}">Codebreaker</a></h5>
     <nav class="my-2 my-md-0 mr-md-3">
-        <a class="p-2 text-dark" href="{{ path('app_homepage') }}">Homepage</a>
         {% if is_granted('ROLE_USER') %}
-            <a class="p-2 text-dark" href="{{ path('app_played_games') }}">Played Games</a>
+            <a class="p-2 text-dark" href="{{ path('app_new_game') }}">New</a>
+            <a class="p-2 text-dark" href="{{ path('app_pending_games') }}">Resume</a>
+            <a class="p-2 text-dark" href="{{ path('app_played_games') }}">Played</a>
             <a class="p-2 text-dark" href="{{ path('app_logout') }}">Logout</a>
         {% else %}
             <a class="p-2 text-dark" href="{{ path('app_login') }}">Login</a>

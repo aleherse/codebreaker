@@ -40,7 +40,9 @@
             {% endfor %}
         </div>
         <div class="row">
-            {{ knp_pagination_render(games) }}
+            <div class="mx-auto">
+                {{ knp_pagination_render(games) }}
+            </div>
         </div>
     {% else %}
         <h3>No games found.</h3>
