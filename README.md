@@ -40,3 +40,14 @@ To enter into the development container's shell run
 ```bash
 docker-compose run app bash
 ```
+
+
+
+Inversion of Control
+Modules are coupled if changing one of them requires changing another one
+tight coupling - loose coupling
+A has an attribute that refers to B
+A calls a method on B
+A extends or implements B
+
+service container
