@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My played games{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <h1>{{ app.user.username|title }}, keep playing you are doing it great!</h1>
+    </div>
+    <div class="row">
+        <div class="col-sm">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col" colspan="3">GAME {{ game.id }}</th>
+                </tr>
+                <tr>
+                    <th scope="col">Attempt</th>
+                    <th scope="col">Guess</th>
+                    <th scope="col">Matches</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for attempt in game.attemptedGuesses %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ attempt.guess }}</td>
+                        <td>{{ attempt|codebreaker_matches }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

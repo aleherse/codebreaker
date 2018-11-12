@@ -69,12 +69,14 @@ class Codebreaker
 
     public function check(Code $guess): void
     {
-        $result = (new GuessChecker($this, $guess))->result();
+        if ($this->hasMoreAttempts()) {
+            $result = (new GuessChecker($this, $guess))->result();
 
-        $this->found = $this->secret->size() === $result->exact();
-        $this->attempts++;
+            $this->found = $this->secret->size() === $result->exact();
+            $this->attempts++;
 
-        $this->attemptedGuesses->add($result);
+            $this->attemptedGuesses->add($result);
+        }
     }
 
     public function lastResult(): AttemptedGuess
@@ -118,5 +120,10 @@ class Codebreaker
     public function player(): ?Player
     {
         return $this->player;
+    }
+
+    public function isPlayer(Player $player): bool
+    {
+        return $player->getId() === $this->player->getId();
     }
 }

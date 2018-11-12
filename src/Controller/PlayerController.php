@@ -40,9 +40,17 @@ class PlayerController extends AbstractController
     /**
      * @Route("/resume/{id}", name="app_resume_game")
      */
-    public function resume(Request $request): Response
+    public function resume(Request $request, Games $games, int $id): Response
     {
-        return new Response('resume_one');
+        $player = $this->getUser();
+        $game = $games->pending($player, $id);
+        if (null === $game || !$game->isPlayer($player)) {
+            return $this->redirectToRoute('app_pending_games');
+        }
+
+        return $this->render('player/resume_game.html.twig', [
+            'game' => $game
+        ]);
     }
 
     /**

@@ -7,6 +7,7 @@ use App\Codebreaker\GameStats;
 use App\Entity\Codebreaker;
 use App\Entity\Player;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Knp\Component\Pager\Pagination\AbstractPagination;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -36,12 +37,13 @@ class CodebreakerRepository extends ServiceEntityRepository
         return $codebreaker;
     }
 
-    public function save(Codebreaker $codebreaker)
+    public function pending(Player $player, int $id): ?Codebreaker
     {
-        if (null !== $codebreaker->player()) {
-            $this->getEntityManager()->persist($codebreaker);
-            $this->getEntityManager()->flush();
-        }
+        return $this->pendingQuery($player)
+            ->andWhere('c.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 
     /**
@@ -49,14 +51,19 @@ class CodebreakerRepository extends ServiceEntityRepository
      */
     public function pendingGames(Player $player): array
     {
+        return $this->pendingQuery($player)
+            ->getQuery()
+            ->getResult();
+    }
+
+    private function pendingQuery(Player $player): QueryBuilder
+    {
         return $this->createQueryBuilder('c')
             ->select('c, a')
             ->leftJoin('c.attemptedGuesses', 'a')
             ->andWhere('c.attempts < :tries AND c.found = FALSE AND c.player = :player')
             ->setParameter('tries', Codebreaker::TRIES)
-            ->setParameter('player', $player)
-            ->getQuery()
-            ->getResult();
+            ->setParameter('player', $player);
     }
 
     /**
@@ -73,6 +80,14 @@ class CodebreakerRepository extends ServiceEntityRepository
             $page,
             self::PAGE_SIZE
         );
+    }
+
+    public function save(Codebreaker $codebreaker)
+    {
+        if (null !== $codebreaker->player()) {
+            $this->getEntityManager()->persist($codebreaker);
+            $this->getEntityManager()->flush();
+        }
     }
 
     public function stats(): GameStats

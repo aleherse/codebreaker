@@ -40,6 +40,11 @@ class Games
         return $this->codebreakers->new($player);
     }
 
+    public function pending(Player $player, int $id): ?Codebreaker
+    {
+        return $this->codebreakers->pending($player, $id);
+    }
+
     public function showStats(View $view)
     {
         $stats = $this->codebreakers->stats();
