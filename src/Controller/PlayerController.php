@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Codebreaker\Games;
+use App\Form\GuessType;
 use App\Repository\CodebreakerRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -48,8 +49,11 @@ class PlayerController extends AbstractController
             return $this->redirectToRoute('app_pending_games');
         }
 
+        $guessForm = $this->createForm(GuessType::class);
+
         return $this->render('player/resume_game.html.twig', [
-            'game' => $game
+            'game' => $game,
+            'guessForm' => $guessForm->createView()
         ]);
     }
 
