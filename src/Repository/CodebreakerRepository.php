@@ -37,15 +37,6 @@ class CodebreakerRepository extends ServiceEntityRepository
         return $codebreaker;
     }
 
-    public function pending(Player $player, int $id): ?Codebreaker
-    {
-        return $this->pendingQuery($player)
-            ->andWhere('c.id = :id')
-            ->setParameter('id', $id)
-            ->getQuery()
-            ->getOneOrNullResult();
-    }
-
     /**
      * @return Codebreaker[]
      */

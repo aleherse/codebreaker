@@ -39,21 +39,37 @@ class PlayerController extends AbstractController
     }
 
     /**
-     * @Route("/resume/{id}", name="app_resume_game")
+     * @Route("/view/{id}", name="app_resume_game")
      */
-    public function resume(Request $request, Games $games, int $id): Response
+    public function view(Request $request, Games $games, int $id): Response
     {
         $player = $this->getUser();
-        $game = $games->pending($player, $id);
+        $game = $games->find($player, $id);
         if (null === $game || !$game->isPlayer($player)) {
             return $this->redirectToRoute('app_pending_games');
         }
 
-        $guessForm = $this->createForm(GuessType::class);
+        $view = null;
+        if ($game->canPlay()) {
+            $form = $this->createForm(GuessType::class);
+
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                try {
+                    $game = $games->playGameAttempt($game, $form->getData()['guess']);
+
+                    return $this->redirectToRoute('app_resume_game', ['id' => $game->id()]);
+                } catch (\InvalidArgumentException $e) {
+                    $this->addFlash('danger', 'A valid code has 4 digits and numbers from 1 to 6');
+                }
+            }
+
+            $view = $form->createView();
+        }
 
         return $this->render('player/resume_game.html.twig', [
             'game' => $game,
-            'guessForm' => $guessForm->createView()
+            'form' => $view
         ]);
     }
 

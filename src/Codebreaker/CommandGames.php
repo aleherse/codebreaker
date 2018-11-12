@@ -2,6 +2,7 @@
 
 namespace App\Codebreaker;
 
+use App\Entity\Codebreaker;
 use App\Entity\Player;
 
 class CommandGames extends Games
@@ -22,5 +23,27 @@ class CommandGames extends Games
         if (null !== $game) {
             $this->playGame($game, $view);
         }
+    }
+
+    protected function playGame(Codebreaker $codebreaker, View $view)
+    {
+        $view->welcome($codebreaker);
+
+        while ($codebreaker->canPlay()) {
+            $numbers = $view->readGuess($codebreaker);
+            if (null === $numbers) {
+                return;
+            }
+
+            try {
+                $this->playGameAttempt($codebreaker, $numbers);
+            } catch (\InvalidArgumentException $e) {
+                continue;
+            }
+
+            $view->guessMatches($codebreaker);
+        }
+
+        $view->endOfGame($codebreaker);
     }
 }

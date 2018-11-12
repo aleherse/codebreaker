@@ -1,14 +1,19 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}My played games{% endblock %}
+{% block title %}Resume game{% endblock %}
 
 {% block body %}
     <div class="row">
         <h1>{{ app.user.username|title }}, keep playing you are doing it great!</h1>
     </div>
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }}">{{ message }}</div>
+        {% endfor %}
+    {% endfor %}
     <div class="row">
         <div class="col-sm">
-            {{ form_start(guessForm) }}
+            {% if game.canPlay %}{{ form_start(form) }}{% endif %}
             <table class="table table-striped">
                 <thead>
                 <tr>
@@ -29,13 +34,20 @@
                     </tr>
                 {% endfor %}
                 <tr>
-                    <td></td>
-                    <td>{{ form_widget(guessForm.guess) }}</td>
-                    <td>{{ form_widget(guessForm.submit) }}</td>
+                    {% if game.canPlay %}
+                        <td></td>
+                        <td>{{ form_widget(form.guess) }}</td>
+                        <td>{{ form_widget(form.submit) }}</td>
+                    {% elseif game.beenFound %}
+                        <td colspan="3" class="bg-success text-white">You broke the code!</td>
+                    {% else %}
+                        <td colspan="3" class="bg-danger text-white">You didn't break the code =(</td>
+                    {% endif %}
                 </tr>
+
                 </tbody>
             </table>
-            {{ form_end(guessForm) }}
+            {% if game.canPlay %}{{ form_end(form) }}{% endif %}
         </div>
     </div>
 {% endblock %}

@@ -40,9 +40,9 @@ class Games
         return $this->codebreakers->new($player);
     }
 
-    public function pending(Player $player, int $id): ?Codebreaker
+    public function find(Player $player, int $id): ?Codebreaker
     {
-        return $this->codebreakers->pending($player, $id);
+        return $this->codebreakers->findOneBy(['id' => $id, 'player' => $player]);
     }
 
     public function showStats(View $view)
@@ -65,30 +65,12 @@ class Games
         $view->showPlayedGames($games);
     }
 
-    protected function playGame(Codebreaker $codebreaker, View $view)
+    public function playGameAttempt(Codebreaker $codebreaker, string $numbers): Codebreaker
     {
-        $view->welcome($codebreaker);
+        $codebreaker->check(Code::fromGuess($numbers));
 
-        while ($codebreaker->canPlay()) {
-            $numbers = $view->readGuess($codebreaker);
-            if (null === $numbers) {
-                exit(0);
-            }
+        $this->codebreakers->save($codebreaker);
 
-            try {
-                $guess = Code::fromGuess($numbers);
-            } catch (\InvalidArgumentException $e) {
-                $view->notAValidGuess();
-                continue;
-            }
-
-            $codebreaker->check($guess);
-
-            $this->codebreakers->save($codebreaker);
-
-            $view->guessMatches($codebreaker);
-        }
-
-        $view->endOfGame($codebreaker);
+        return $codebreaker;
     }
 }
