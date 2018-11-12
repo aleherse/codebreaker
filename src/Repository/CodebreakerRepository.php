@@ -47,7 +47,7 @@ class CodebreakerRepository extends ServiceEntityRepository
     /**
      * @return Codebreaker[]
      */
-    public function continuableGames(Player $player): array
+    public function pendingGames(Player $player): array
     {
         return $this->createQueryBuilder('c')
             ->select('c, a')

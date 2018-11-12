@@ -28,9 +28,13 @@ class PlayerController extends AbstractController
     /**
      * @Route("/games", name="app_pending_games")
      */
-    public function pending(Request $request): Response
+    public function pending(Games $games): Response
     {
-        return new Response('resume');
+        $games = $games->pendingGames($this->getUser());
+
+        return $this->render('player/pending_games.html.twig', [
+            'games' => $games
+        ]);
     }
 
     /**

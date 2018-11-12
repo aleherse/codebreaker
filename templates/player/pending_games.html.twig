@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My played games{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <h1>{{ app.user.username|title }}, these are the games you have paused!</h1>
+    </div>
+    {% if games|length > 0 %}
+        <div class="row">
+            <div class="col-sm">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Attempts</th>
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for game in games %}
+                        <tr>
+                            <td>{{ game.id }}</td>
+                            <td>{{ game.attempts }}</td>
+                            <td><a href="{{ path('app_resume_game', {'id': game.id }) }}"  class="btn btn-primary">Resume</a></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% else %}
+        <h3>No games found.</h3>
+    {% endif %}
+{% endblock %}

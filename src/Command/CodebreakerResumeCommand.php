@@ -18,6 +18,13 @@ class CodebreakerResumeCommand extends CodebreakerBaseCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->game->resume(new ConsoleView(new SymfonyStyle($input, $output)));
+        $view = new ConsoleView(new SymfonyStyle($input, $output));
+
+        if (null === $player = $this->auth->currentPlayer()) {
+            $view->anonymousForbidden();
+            return;
+        }
+
+        $this->game->resume($view, $player);
     }
 }

@@ -25,20 +25,14 @@ class Games
         $this->auth = $auth;
     }
 
-    public function resume(View $view)
+    /**
+     * @param Player $player
+     *
+     * @return Codebreaker[]
+     */
+    public function pendingGames(Player $player): array
     {
-        if (null === $player = $this->auth->currentPlayer()) {
-            $view->anonymousForbidden();
-            return;
-        }
-
-        $game = $view->chooseGame(
-            $this->codebreakers->continuableGames($player)
-        );
-
-        if (null !== $game) {
-            $this->playGame($game, $view);
-        }
+        return $this->codebreakers->pendingGames($player);
     }
 
     public function new(Player $player): Codebreaker
