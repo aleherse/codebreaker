@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Codebreaker\Games;
 use App\Repository\CodebreakerRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,9 +18,11 @@ class PlayerController extends AbstractController
     /**
      * @Route("/new", name="app_new_game")
      */
-    public function start(Request $request): Response
+    public function start(Games $games): Response
     {
-        return new Response('new game');
+        $game = $games->new($this->getUser());
+
+        return $this->redirectToRoute('app_resume_game', ['id' => $game->id()]);
     }
 
     /**
