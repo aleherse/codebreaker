@@ -5,7 +5,6 @@ namespace App\Codebreaker;
 use App\Entity\Codebreaker;
 use App\Entity\Player;
 use App\Repository\CodebreakerRepository;
-use App\Security\Authentication;
 
 class Games
 {
@@ -14,15 +13,9 @@ class Games
      */
     protected $codebreakers;
 
-    /**
-     * @var Authentication
-     */
-    protected $auth;
-
-    public function __construct(CodebreakerRepository $codebreakers, Authentication $auth)
+    public function __construct(CodebreakerRepository $codebreakers)
     {
         $this->codebreakers = $codebreakers;
-        $this->auth = $auth;
     }
 
     /**
@@ -52,17 +45,9 @@ class Games
         $view->showStats($stats);
     }
 
-    public function playedGames(View $view)
+    public function finishedGames(Player $player, int $page = 1)
     {
-        if (null === $player = $this->auth->currentPlayer()) {
-            $view->anonymousForbidden();
-            return;
-        }
-
-        // @TODO: Add pagination
-        $games = $this->codebreakers->finishedGames($player, 1);
-
-        $view->showPlayedGames($games);
+        return $this->codebreakers->finishedGames($player, $page);
     }
 
     public function playGameAttempt(Codebreaker $codebreaker, string $numbers): Codebreaker

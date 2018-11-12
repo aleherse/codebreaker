@@ -76,9 +76,9 @@ class PlayerController extends AbstractController
     /**
      * @Route("/played", name="app_played_games")
      */
-    public function played(CodebreakerRepository $codebreakers, Request $request): Response
+    public function played(Games $games, Request $request): Response
     {
-        $games = $codebreakers->finishedGames(
+        $games = $games->finishedGames(
             $this->getUser(),
             $request->query->getInt('page', 1)
         );

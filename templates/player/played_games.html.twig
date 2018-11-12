@@ -29,7 +29,7 @@
                                 <td>{{ attempt|codebreaker_matches }}</td>
                             </tr>
                         {% endfor %}
-                        <tr>
+                        <tr  class="{% if game.beenFound %}bg-success{% else %}bg-danger{% endif %} text-white">
                             <td>Code</td>
                             <td>{{ game.secretCode }}</td>
                             <td></td>

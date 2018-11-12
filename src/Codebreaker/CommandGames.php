@@ -46,4 +46,12 @@ class CommandGames extends Games
 
         $view->endOfGame($codebreaker);
     }
+
+    public function playedGames(View $view, Player $player)
+    {
+        // @TODO: Add pagination
+        $games = $this->codebreakers->finishedGames($player, 1);
+
+        $view->showPlayedGames($games);
+    }
 }

@@ -18,6 +18,13 @@ class CodebreakerGamesCommand extends CodebreakerBaseCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->game->playedGames(new ConsoleView(new SymfonyStyle($input, $output)));
+        $view = new ConsoleView(new SymfonyStyle($input, $output));
+
+        if (null === $player = $this->auth->currentPlayer()) {
+            $view->anonymousForbidden();
+            return;
+        }
+
+        $this->game->playedGames($view, $player);
     }
 }
