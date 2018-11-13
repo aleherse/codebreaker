@@ -38,4 +38,13 @@ class PublicController extends AbstractController
     {
         return new Response('');
     }
+
+    /**
+     * @Route("/register", name="app_register")
+     */
+
+    public function register(): Response
+    {
+        return $this->render('public/register.html.twig', []);
+    }
 }
