@@ -38,11 +38,9 @@ class GameService
         return $this->codebreakers->findOneBy(['id' => $id, 'player' => $player]);
     }
 
-    public function showStats(View $view)
+    public function stats()
     {
-        $stats = $this->codebreakers->stats();
-
-        $view->showStats($stats);
+        return $this->codebreakers->stats();
     }
 
     public function finishedGames(Player $player, int $page = 1)

@@ -18,7 +18,7 @@ class CodebreakerPlayCommand extends CodebreakerBaseCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->game->play(
+        $this->games->play(
             new ConsoleView(new SymfonyStyle($input, $output)),
             $this->auth->currentPlayer()
         );

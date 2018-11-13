@@ -25,6 +25,6 @@ class CodebreakerResumeCommand extends CodebreakerBaseCommand
             return;
         }
 
-        $this->game->resume($view, $player);
+        $this->games->resume($view, $player);
     }
 }

@@ -25,6 +25,6 @@ class CodebreakerGamesCommand extends CodebreakerBaseCommand
             return;
         }
 
-        $this->game->playedGames($view, $player);
+        $this->games->playedGames($view, $player);
     }
 }

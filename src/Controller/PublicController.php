@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
+use App\Codebreaker\GameService;
 use App\Entity\Player;
 use App\Form\PlayerType;
-use App\Repository\CodebreakerRepository;
 use App\Repository\PlayerRepository;
 use App\Security\WebPlayerAuthenticator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,11 +19,11 @@ class PublicController extends AbstractController
     /**
      * @Route("/", name="app_homepage")
      */
-    public function index(CodebreakerRepository $codebreakers): Response
+    public function index(GameService $games): Response
     {
-        $stats = $codebreakers->stats();
-
-        return $this->render('public/homepage.html.twig', ['stats' => $stats]);
+        return $this->render('public/homepage.html.twig', [
+            'stats' => $games->stats()
+        ]);
     }
 
     /**
@@ -64,7 +64,12 @@ class PublicController extends AbstractController
 
             $players->save($player);
 
-            return $guardHandler->authenticateUserAndHandleSuccess($player, $request, $authenticator, 'main');
+            return $guardHandler->authenticateUserAndHandleSuccess(
+                $player,
+                $request,
+                $authenticator,
+                'main'
+            );
         }
 
         return $this->render('public/register.html.twig', [

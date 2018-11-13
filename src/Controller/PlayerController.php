@@ -75,7 +75,7 @@ class PlayerController extends AbstractController
     /**
      * @Route("/played", name="app_played_games")
      */
-    public function played(GameService $games, Request $request): Response
+    public function played(Request $request, GameService $games): Response
     {
         $games = $games->finishedGames(
             $this->getUser(),

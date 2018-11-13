@@ -64,4 +64,11 @@ class CommandGameHandler
 
         $view->showPlayedGames($games);
     }
+
+    public function stats(View $view)
+    {
+        $view->showStats(
+            $this->games->stats()
+        );
+    }
 }

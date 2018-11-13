@@ -20,6 +20,6 @@ class CodebreakerStatisticsCommand extends CodebreakerBaseCommand
     {
         $view = new ConsoleView(new SymfonyStyle($input, $output));
 
-        $this->game->showStats($view);
+        $this->games->stats($view);
     }
 }
