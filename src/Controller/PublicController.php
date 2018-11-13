@@ -6,10 +6,12 @@ use App\Entity\Player;
 use App\Form\PlayerType;
 use App\Repository\CodebreakerRepository;
 use App\Repository\PlayerRepository;
+use App\Security\WebPlayerAuthenticator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class PublicController extends AbstractController
@@ -47,8 +49,12 @@ class PublicController extends AbstractController
      * @Route("/register", name="app_register")
      */
 
-    public function register(Request $request, PlayerRepository $players): Response
-    {
+    public function register(
+        Request $request,
+        PlayerRepository $players,
+        WebPlayerAuthenticator $authenticator,
+        GuardAuthenticatorHandler $guardHandler
+    ): Response {
         $form = $this->createForm(PlayerType::class);
 
         $form->handleRequest($request);
@@ -57,6 +63,8 @@ class PublicController extends AbstractController
             $player = $form->getData();
 
             $players->save($player);
+
+            return $guardHandler->authenticateUserAndHandleSuccess($player, $request, $authenticator, 'main');
         }
 
         return $this->render('public/register.html.twig', [

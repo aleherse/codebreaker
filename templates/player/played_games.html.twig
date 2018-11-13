@@ -46,5 +46,6 @@
         </div>
     {% else %}
         <h3>No games found.</h3>
+        Do you want to <a href="{{ path('app_pending_games') }}">resume</a> a game?
     {% endif %}
 {% endblock %}
