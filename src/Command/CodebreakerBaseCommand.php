@@ -2,14 +2,14 @@
 
 namespace App\Command;
 
-use App\Codebreaker\CommandGames;
+use App\Codebreaker\CommandGameHandler;
 use App\Security\Authentication;
 use Symfony\Component\Console\Command\Command;
 
 abstract class CodebreakerBaseCommand extends Command
 {
     /**
-     * @var CommandGames
+     * @var CommandGameHandler
      */
     protected $game;
 
@@ -18,7 +18,7 @@ abstract class CodebreakerBaseCommand extends Command
      */
     protected $auth;
 
-    public function __construct(CommandGames $game, Authentication $authentication)
+    public function __construct(CommandGameHandler $game, Authentication $authentication)
     {
         parent::__construct(null);
         $this->game = $game;

@@ -6,7 +6,7 @@ use App\Entity\Codebreaker;
 use App\Entity\Player;
 use App\Repository\CodebreakerRepository;
 
-class Games
+class GameService
 {
     /**
      * @var CodebreakerRepository
@@ -28,7 +28,7 @@ class Games
         return $this->codebreakers->pendingGames($player);
     }
 
-    public function new(Player $player): Codebreaker
+    public function new(Player $player = null): Codebreaker
     {
         return $this->codebreakers->new($player);
     }

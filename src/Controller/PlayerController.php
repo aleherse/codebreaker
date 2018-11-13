@@ -2,9 +2,8 @@
 
 namespace App\Controller;
 
-use App\Codebreaker\Games;
+use App\Codebreaker\GameService;
 use App\Form\GuessType;
-use App\Repository\CodebreakerRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,7 +18,7 @@ class PlayerController extends AbstractController
     /**
      * @Route("/new", name="app_new_game")
      */
-    public function start(Games $games): Response
+    public function start(GameService $games): Response
     {
         $game = $games->new($this->getUser());
 
@@ -29,7 +28,7 @@ class PlayerController extends AbstractController
     /**
      * @Route("/games", name="app_pending_games")
      */
-    public function pending(Games $games): Response
+    public function pending(GameService $games): Response
     {
         $games = $games->pendingGames($this->getUser());
 
@@ -41,7 +40,7 @@ class PlayerController extends AbstractController
     /**
      * @Route("/view/{id}", name="app_resume_game")
      */
-    public function view(Request $request, Games $games, int $id): Response
+    public function view(Request $request, GameService $games, int $id): Response
     {
         $player = $this->getUser();
         $game = $games->find($player, $id);
@@ -49,7 +48,7 @@ class PlayerController extends AbstractController
             return $this->redirectToRoute('app_pending_games');
         }
 
-        $view = null;
+        $formView = null;
         if ($game->canPlay()) {
             $form = $this->createForm(GuessType::class);
 
@@ -64,19 +63,19 @@ class PlayerController extends AbstractController
                 }
             }
 
-            $view = $form->createView();
+            $formView = $form->createView();
         }
 
         return $this->render('player/resume_game.html.twig', [
             'game' => $game,
-            'form' => $view
+            'form' => $formView
         ]);
     }
 
     /**
      * @Route("/played", name="app_played_games")
      */
-    public function played(Games $games, Request $request): Response
+    public function played(GameService $games, Request $request): Response
     {
         $games = $games->finishedGames(
             $this->getUser(),

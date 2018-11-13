@@ -65,11 +65,7 @@ class Authentication
 
         $this->cache->set(self::CACHE_KEY, $session, self::CACHE_EXPIRATION_TIME);
 
-        return $this->players->createQueryBuilder('p')
-            ->where('p.session = :session')
-            ->setParameter('session', $session)
-            ->getQuery()
-            ->getOneOrNullResult();
+        return $this->players->findOneBy(['session' => $session]);
     }
 
     public function logout()
