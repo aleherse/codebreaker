@@ -2,9 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Player;
 use App\Form\PlayerType;
 use App\Repository\CodebreakerRepository;
+use App\Repository\PlayerRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
@@ -44,9 +47,17 @@ class PublicController extends AbstractController
      * @Route("/register", name="app_register")
      */
 
-    public function register(): Response
+    public function register(Request $request, PlayerRepository $players): Response
     {
         $form = $this->createForm(PlayerType::class);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var Player $player */
+            $player = $form->getData();
+
+            $players->save($player);
+        }
 
         return $this->render('public/register.html.twig', [
             'form' => $form->createView()
