@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Form\PlayerType;
 use App\Repository\CodebreakerRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -45,6 +46,10 @@ class PublicController extends AbstractController
 
     public function register(): Response
     {
-        return $this->render('public/register.html.twig', []);
+        $form = $this->createForm(PlayerType::class);
+
+        return $this->render('public/register.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
 }
